@@ -1,3 +1,18 @@
+/*
+ * Copyright 2015 Doltech Systems Ltd.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
 package nz.co.doltech.databind.core.gwt;
 
 import java.util.HashMap;
@@ -7,7 +22,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.HasValue;
 
-import nz.co.doltech.databind.core.Converters;
+import nz.co.doltech.databind.core.DefaultConverters;
 import nz.co.doltech.databind.core.DataAdapterInfo;
 import nz.co.doltech.databind.core.PlatformSpecific;
 import nz.co.doltech.databind.core.gwt.propertyadapters.ValuePropertyAdapter;
@@ -120,8 +135,9 @@ public final class PlatformSpecificGwt implements PlatformSpecific {
                                         DataAdapterInfo res) {
         // try to guess the HasValue type
         res.setDataType(Object.class);
-        if (widget instanceof HasText)
+        if (widget instanceof HasText) {
             res.setDataType(String.class);
+        }
 
         String debugString = "";
 
@@ -129,11 +145,12 @@ public final class PlatformSpecificGwt implements PlatformSpecific {
         Class<?> dataType = res.getDataType();
         if (srcPptyType != null && dataType != null && dataType != srcPptyType && srcPptyType != Property.class) {
             // try to find a converter, if not : fail
-            res.setConverter(Converters.findConverter(srcPptyType, dataType));
-            if (res.getConverter() == null)
+            res.setConverter(DefaultConverters.findConverter(srcPptyType, dataType));
+            if (res.getConverter() == null) {
                 debugString = "[ERROR: Cannot find converter from " + srcPptyType + " to " + dataType + "]";
-            else
+            } else {
                 debugString = "[" + srcPptyType.getSimpleName() + ">" + dataType.getSimpleName() + "] " + debugString;
+            }
         }
 
         debugString += "\"" + property + ".$HasValue\"";
@@ -142,7 +159,7 @@ public final class PlatformSpecificGwt implements PlatformSpecific {
         res.setAdapter(new CompositePropertyAdapter(context, property + ".$HasValue"));
     }
 
-    // DTOMapper
+    // Model Mapper
 
     private static class DynamicPropertyBagAccessJre {
         private static HashMap<Integer, DynamicPropertyBag> propertyBags = new HashMap<>();
@@ -157,15 +174,15 @@ public final class PlatformSpecificGwt implements PlatformSpecific {
     }
 
     private static class MetatdataJre {
-        private static final HashMap<Integer, Object> metadatas = new HashMap<>();
+        private static final HashMap<Integer, Object> metadataMap = new HashMap<>();
 
         static void setObjectMetadata(Object object, Object metadata) {
-            metadatas.put(System.identityHashCode(object), metadata);
+            metadataMap.put(System.identityHashCode(object), metadata);
         }
 
         static <T> T getObjectMetadata(Object object) {
             @SuppressWarnings("unchecked")
-            T result = (T) metadatas.get(System.identityHashCode(object));
+            T result = (T) metadataMap.get(System.identityHashCode(object));
             return result;
         }
     }

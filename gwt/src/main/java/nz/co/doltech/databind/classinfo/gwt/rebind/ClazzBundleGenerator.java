@@ -1,3 +1,18 @@
+/*
+ * Copyright 2015 Doltech Systems Ltd.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
 package nz.co.doltech.databind.classinfo.gwt.rebind;
 
 import java.io.PrintWriter;
@@ -136,7 +151,7 @@ public class ClazzBundleGenerator extends Generator {
         // which extends the asked type
         composer.addImplementedInterface(askedType.getParameterizedQualifiedSourceName());
 
-        composer.addImport("nz.co.doltech.databind.classinfo.clazz");
+        composer.addImport("nz.co.doltech.databind.classinfo.Clazz");
         composer.addImport("nz.co.doltech.databind.classinfo.ClassInfo");
         composer.addImport("com.google.gwt.core.shared.GWT");
 
@@ -159,7 +174,7 @@ public class ClazzBundleGenerator extends Generator {
         for (JType type : introspectedTypes) {
             if(!ignoredTypes.contains(type)) {
                 String interfaceName = "Clazz_" + type.getQualifiedSourceName().replaceAll("\\.", "_");
-                sourceWriter.println("public interface " + interfaceName + " extends clazz<" + type.getQualifiedSourceName() + "> {}");
+                sourceWriter.println("public interface " + interfaceName + " extends Clazz<" + type.getQualifiedSourceName() + "> {}");
             }
         }
         sourceWriter.println("");
@@ -170,7 +185,7 @@ public class ClazzBundleGenerator extends Generator {
         for (JType type : introspectedTypes) {
             if(!ignoredTypes.contains(type)) {
                 String interfaceName = "Clazz_" + type.getQualifiedSourceName().replaceAll("\\.", "_");
-                sourceWriter.println("ClassInfo.registerClazz( (clazz<?>) GWT.create( " + interfaceName + ".class ) );");
+                sourceWriter.println("ClassInfo.registerClazz( (Clazz<?>) GWT.create( " + interfaceName + ".class ) );");
             }
         }
         sourceWriter.outdent();

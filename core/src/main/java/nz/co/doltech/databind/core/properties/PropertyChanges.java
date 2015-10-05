@@ -1,9 +1,24 @@
+/*
+ * Copyright 2015 Doltech Systems Ltd.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
 package nz.co.doltech.databind.core.properties;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import nz.co.doltech.databind.core.INotifyPropertyChanged;
+import nz.co.doltech.databind.core.NotifyPropertyChanged;
 import nz.co.doltech.databind.core.PlatformSpecificProvider;
 
 /**
@@ -29,9 +44,9 @@ public class PropertyChanges {
     Object register(Object source, String propertyName, PropertyChangedHandler handler) {
         assert source != null;
 
-        if (source instanceof INotifyPropertyChanged) {
+        if (source instanceof NotifyPropertyChanged) {
             DirectHandlerInfo info = new DirectHandlerInfo();
-            info.source = (INotifyPropertyChanged) source;
+            info.source = (NotifyPropertyChanged) source;
             info.registrationObject = info.source.registerPropertyChangedEvent(propertyName, handler);
             return info;
         }
@@ -104,7 +119,7 @@ public class PropertyChanges {
     }
 
     /**
-     * Notifies the Hexa event system of an object changing one of
+     * Notifies the event system of an object changing one of
      * its properties.
      *
      * @param sender       The object whom property changed
@@ -152,7 +167,7 @@ public class PropertyChanges {
     }
 
     private static class DirectHandlerInfo {
-        INotifyPropertyChanged source;
+        NotifyPropertyChanged source;
         Object registrationObject;
     }
 

@@ -2,76 +2,94 @@ package nz.co.doltech.databind.core;
 
 import java.util.logging.Logger;
 
-import nz.co.doltech.databind.util.Action2;
+import nz.co.doltech.databind.util.Action1;
 import nz.co.doltech.databind.core.propertyadapters.ObjectPropertyAdapter;
+/*
+ * Copyright 2015 Doltech Systems Ltd.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
 import nz.co.doltech.databind.core.propertyadapters.PropertyAdapter;
 
 /**
  * Manages the binding between a source and a destination.
- * <p/>
- * <p/>
+ * <br/><br/>
  * The data binding has several options like OneWay, TwoWay, ...<br/>
  * The data propagation can happen synchronously after a data changed, or it can
  * happen asynchronously through a deferred command.
  *
  * @author Arnaud Tournier
+ * @author Ben Dol
  */
 public class DataBinding {
     private static final Logger logger = Logger.getLogger(DataBinding.class.getName());
 
     private final String logPrefix;
-    private boolean fActivated;
+
+    private boolean activated;
+    private boolean settingDestination;
+    private boolean settingSource;
+
     private PropertyAdapter source;
     private Object sourceHandler;
-    private boolean fSettingSource;
+
     private PropertyAdapter destination;
     private Object destinationHandler;
-    private boolean fSettingDestination;
+
     private Converter converter;
 
-    private final Action2<PropertyAdapter, Object> onSourceChanged = new Action2<PropertyAdapter, Object>() {
+    private final Action1<PropertyAdapter, Object> onSourceChanged = new Action1<PropertyAdapter, Object>() {
         @Override
         public void exec(PropertyAdapter param, Object cookie) {
             // prevent us to wake up ourselves
-            if (fSettingSource)
+            if (settingSource || !activated) {
                 return;
+            }
 
-            if (logPrefix != null)
+            if (logPrefix != null) {
                 log("source changed, propagating to destination ...");
-
-            if (!fActivated)
-                return;
+            }
 
             Object value = source.getValue();
-            if (logPrefix != null)
+            if (logPrefix != null) {
                 log(" - source value : " + value);
+            }
 
             if (converter != null) {
                 if (logPrefix != null) {
                     log("... converting value ...");
                 }
+
                 value = converter.convert(value);
                 if (logPrefix != null)
                     log(" - converted to : " + value);
             }
 
-            fSettingDestination = true;
+            settingDestination = true;
             destination.setValue(value);
-            fSettingDestination = false;
+            settingDestination = false;
 
-            if (logPrefix != null)
+            if (logPrefix != null) {
                 log(" - done propagating source");
+            }
         }
     };
 
-    private final Action2<PropertyAdapter, Object> onDestinationChanged = new Action2<PropertyAdapter, Object>() {
+    private final Action1<PropertyAdapter, Object> onDestinationChanged = new Action1<PropertyAdapter, Object>() {
         @Override
         public void exec(PropertyAdapter param, Object cookie) {
             // prevent us to wake up ourselves
-            if (fSettingDestination)
-                return;
-
-            if (!fActivated)
+            if (settingDestination || !activated)
                 return;
 
             log("destination changed, propagating to source ...");
@@ -83,9 +101,9 @@ public class DataBinding {
                 value = converter.convertBack(value);
             }
 
-            fSettingSource = true;
+            settingSource = true;
             source.setValue(value);
-            fSettingSource = false;
+            settingSource = false;
 
             log("done setting destination to " + value);
         }
@@ -119,7 +137,7 @@ public class DataBinding {
      * Activates the data binding and propagates the source to the destination
      */
     public DataBinding activate() {
-        fActivated = true;
+        activated = true;
 
         log("activation");
 
@@ -132,7 +150,7 @@ public class DataBinding {
      * Suspend the data binding. Can be reactivated with {@link #activate}
      */
     public DataBinding suspend() {
-        fActivated = false;
+        activated = false;
 
         log("suspended");
 
@@ -145,9 +163,9 @@ public class DataBinding {
      * in order to lower memory usage.
      */
     public void terminate() {
-        log("term");
+        log("terminate");
 
-        fActivated = false;
+        activated = false;
         converter = null;
 
         if (source != null && sourceHandler != null) {
@@ -166,8 +184,9 @@ public class DataBinding {
     }
 
     protected void log(String text) {
-        if (logPrefix == null)
+        if (logPrefix == null) {
             return;
+        }
 
         logger.info("DATABINDING " + logPrefix + " : " + text);
     }

@@ -1,3 +1,18 @@
+/*
+ * Copyright 2015 Doltech Systems Ltd.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
 package nz.co.doltech.databind.core;
 
 import nz.co.doltech.databind.core.propertyadapters.CompositePropertyAdapter;
@@ -9,8 +24,7 @@ import nz.co.doltech.databind.core.propertyadapters.PropertyAdapter;
  * this class is returned to finish the binding creation process.
  *
  * @author Arnaud Tournier
- *         (c) LTE Consulting - 2015
- *         http://www.doltech.co.nz
+ * @author Ben Dol
  */
 public class BindingCreation {
     protected final PropertyAdapter source;
@@ -95,7 +109,7 @@ public class BindingCreation {
      * @return The DataBinding object
      */
     public DataBinding mapTo(Object destination) {
-        return mode(Mode.OneWay).to(new CompositePropertyAdapter(destination, "$DTOMap"));
+        return mode(Mode.OneWay).to(new CompositePropertyAdapter(destination, CompositePropertyAdapter.MODELMAP_TOKEN));
     }
 
     /**

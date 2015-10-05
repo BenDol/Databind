@@ -1,3 +1,18 @@
+/*
+ * Copyright 2015 Doltech Systems Ltd.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
 package nz.co.doltech.databind.core.properties;
 
 import nz.co.doltech.databind.classinfo.Clazz;
@@ -8,7 +23,8 @@ import nz.co.doltech.databind.classinfo.Clazz;
  * A Property on an object is a value that can be get and/or set through either
  * a getter/setter or directly through the object's field.
  *
- * @author Arnaud Tournier (c) LTE Consulting - 2015 http://www.doltech.co.nz
+ * @author Arnaud Tournier
+ * @author Ben Dol
  */
 public class Properties {
     private final static PropertyValues propertyValues = new PropertyValues();
@@ -64,8 +80,8 @@ public class Properties {
     }
 
     /**
-     * Notifies the Hexa event system of an object changing one of
-     * its properties.
+     * Notifies the event system of an object changing one
+     * of its properties.
      *
      * @param sender       The object whom property changed
      * @param propertyName The changed property name

@@ -1,22 +1,38 @@
+/*
+ * Copyright 2015 Doltech Systems Ltd.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
 package nz.co.doltech.databind.core.propertyadapters;
 
 import java.util.ArrayList;
 
 import nz.co.doltech.databind.core.PlatformSpecificProvider;
-import nz.co.doltech.databind.util.Action2;
+import nz.co.doltech.databind.util.Action1;
 
 public class CompositePropertyAdapter implements PropertyAdapter {
     public final static String HASVALUE_TOKEN = "$HasValue";
-    public final static String DTOMAP_TOKEN = "$DTOMap";
+    public final static String MODELMAP_TOKEN = "$ModelMap";
 
-    Object context;
-    String[] path;
+    private Object context;
+    private String[] path;
 
-    PropertyAdapter[] adapters;
-    Object[] adapterHandlerRegistrations;
+    private PropertyAdapter[] adapters;
+    private Object[] adapterHandlerRegistrations;
 
     private ArrayList<ClientInfo> clients;
-    private Action2<PropertyAdapter, Object> onPropertyChanged = new Action2<PropertyAdapter, Object>() {
+
+    private Action1<PropertyAdapter, Object> onPropertyChanged = new Action1<PropertyAdapter, Object>() {
         @Override
         public void exec(PropertyAdapter p1, Object p2) {
             int adapterNo = (Integer) p2;
@@ -31,7 +47,7 @@ public class CompositePropertyAdapter implements PropertyAdapter {
                 adapterHandlerRegistrations[p] = null;
             }
 
-            // signal callbacks that a change occured
+            // signal callbacks that a change occurred
             if (clients != null) {
                 for (ClientInfo client : clients)
                     client.callback.exec(CompositePropertyAdapter.this, client.cookie);
@@ -54,7 +70,6 @@ public class CompositePropertyAdapter implements PropertyAdapter {
         if (adapters[path.length - 1] != null) {
             return adapters[path.length - 1].getValue();
         }
-
         return null;
     }
 
@@ -62,16 +77,18 @@ public class CompositePropertyAdapter implements PropertyAdapter {
     public void setValue(Object object) {
         tryCreateAdapters();
 
-        if (adapters[path.length - 1] != null)
+        if (adapters[path.length - 1] != null) {
             adapters[path.length - 1].setValue(object);
+        }
     }
 
     @Override
-    public Object registerPropertyChanged(Action2<PropertyAdapter, Object> callback, Object cookie) {
+    public Object registerPropertyChanged(Action1<PropertyAdapter, Object> callback, Object cookie) {
         tryCreateAdapters();
 
-        if (clients == null)
+        if (clients == null) {
             clients = new ArrayList<>();
+        }
 
         ClientInfo client = new ClientInfo();
         client.callback = callback;
@@ -80,7 +97,6 @@ public class CompositePropertyAdapter implements PropertyAdapter {
         // what if any sub path contains a property that's not subscribable ?
 
         clients.add(client);
-
         return client;
     }
 
@@ -91,8 +107,9 @@ public class CompositePropertyAdapter implements PropertyAdapter {
         client.cookie = null;
 
         clients.remove(client);
-        if (clients.isEmpty())
+        if (clients.isEmpty()) {
             clients = null;
+        }
 
         // remove adapters
         for (int i = 0; i < adapters.length; i++) {
@@ -121,10 +138,12 @@ public class CompositePropertyAdapter implements PropertyAdapter {
                 // pathItem or the root context)
                 // path item is path[p]
                 if (pathItem.charAt(0) == '$') {
-                    if (PlatformSpecificProvider.get().isBindingToken(pathItem))
+                    if (PlatformSpecificProvider.get().isBindingToken(pathItem)) {
                         adapters[p] = PlatformSpecificProvider.get().createPropertyAdapter(object);
-                    else if (CompositePropertyAdapter.DTOMAP_TOKEN.equals(pathItem))
-                        adapters[p] = new DTOMapperPropertyAdapter(object);
+                    }
+                    else if (CompositePropertyAdapter.MODELMAP_TOKEN.equals(pathItem)) {
+                        adapters[p] = new MapperPropertyAdapter(object);
+                    }
                 } else {
                     adapters[p] = new ObjectPropertyAdapter(object, pathItem);
                 }
@@ -135,13 +154,14 @@ public class CompositePropertyAdapter implements PropertyAdapter {
                 adapterHandlerRegistrations[p] = adapters[p].registerPropertyChanged(onPropertyChanged, p);
             }
 
-            if (p < path.length - 1)
+            if (p < path.length - 1) {
                 object = adapters[p].getValue();
+            }
         }
     }
 
     class ClientInfo {
-        Action2<PropertyAdapter, Object> callback;
+        Action1<PropertyAdapter, Object> callback;
         Object cookie;
     }
 }

@@ -14,10 +14,6 @@
     <packaging>jar</packaging>
     
     <name>core</name>
-    <description>HexaBinding is a tool used when some data binding repetitive glue code is written by the developer.
-        This library does it instead.
-    </description>
-    <url>http://www.doltech.co.nz/hexabinding</url>
     
     <dependencies>
         <dependency>
