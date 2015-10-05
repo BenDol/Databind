@@ -70,7 +70,9 @@ public class ValuePropertyAdapter implements PropertyAdapter, ValueChangeHandler
     @Override
     public void setValue(Object object) {
         try {
-            hasValue.setValue(object, true);
+            if(object != null) {
+                hasValue.setValue(object, true);
+            }
         } catch (Exception ex) {
             logger.log(Level.SEVERE, "Unable to setValue for object '"
                 + hasValue.getClass().getName() + "' using the value: " + object);

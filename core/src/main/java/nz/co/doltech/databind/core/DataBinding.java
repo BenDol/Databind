@@ -188,6 +188,6 @@ public class DataBinding {
             return;
         }
 
-        logger.info("DATABINDING " + logPrefix + " : " + text);
+        logger.info("DataBind: " + logPrefix + " : " + text);
     }
 }
