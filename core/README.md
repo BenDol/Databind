@@ -59,7 +59,7 @@ Then, specify at least the Java 6 language level :
 
 In your application, create one pojo class all by hand
 
-	import nz.co.doltech.databinder.databinding.properties.Properties;
+	import nz.co.doltech.databind.core.properties.Properties;
 	
 	public class Person {
 		private String name;
@@ -465,7 +465,7 @@ Our project will be using the `@Observable` annotation and thus annotation proce
 
 In your gwt module file, add this line :
 
-	<inherits name='nz.co.doltech.databinder.Databinder'/>
+	<inherits name='nz.co.doltech.databind.Databind'/>
 
 ### First sample
 

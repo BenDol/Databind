@@ -1,2 +1,2 @@
-nz.co.doltech.databinder.databinding.annotation.processor.ObservableAnnotationProcessor
-nz.co.doltech.databinder.databinding.gwt.annotation.processor.GwtObservableAnnotationProcessor
+nz.co.doltech.databind.annotation.processor.ObservableAnnotationProcessor
+nz.co.doltech.databind.gwt.annotation.processor.GwtObservableAnnotationProcessor

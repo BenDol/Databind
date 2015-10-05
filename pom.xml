@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>nz.co.doltech</groupId>
-    <artifactId>databinder</artifactId>
+    <artifactId>databind</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <packaging>pom</packaging>
@@ -17,6 +17,7 @@
     <modules>
         <module>core</module>
         <module>apt</module>
+        <module>classinfo</module>
         <module>gwt</module>
         <module>util</module>
     </modules>
@@ -65,25 +66,31 @@
         <dependencies>
             <dependency>
                 <groupId>nz.co.doltech</groupId>
-                <artifactId>databinder-core</artifactId>
-                <version>1.0-SNAPSHOT</version>
-            </dependency>
-            
-            <dependency>
-                <groupId>nz.co.doltech</groupId>
-                <artifactId>databinder-apt</artifactId>
-                <version>1.0-SNAPSHOT</version>
-            </dependency>
-            
-            <dependency>
-                <groupId>nz.co.doltech</groupId>
-                <artifactId>databinder-gwt</artifactId>
+                <artifactId>databind-core</artifactId>
                 <version>1.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>nz.co.doltech</groupId>
-                <artifactId>databinder-util</artifactId>
+                <artifactId>databind-classinfo</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+            
+            <dependency>
+                <groupId>nz.co.doltech</groupId>
+                <artifactId>databind-apt</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+            
+            <dependency>
+                <groupId>nz.co.doltech</groupId>
+                <artifactId>databind-gwt</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+
+            <dependency>
+                <groupId>nz.co.doltech</groupId>
+                <artifactId>databind-util</artifactId>
                 <version>1.0-SNAPSHOT</version>
             </dependency>
             

@@ -5,11 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>nz.co.doltech</groupId>
-        <artifactId>databinder</artifactId>
+        <artifactId>databind</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
     
-    <artifactId>databinder-util</artifactId>
+    <artifactId>databind-util</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     
