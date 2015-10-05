@@ -38,9 +38,9 @@
     </developers>
 
     <scm>
-        <connection>scm:git:git@github.com:ltearno/hexa.tools</connection>
-        <developerConnection>scm:git:git@github.com:ltearno/hexa.tools</developerConnection>
-        <url>git@github.com:ltearno/hexa.tools</url>
+        <connection>scm:git:git@github.com:BenDol/Databinder</connection>
+        <developerConnection>scm:git:git@github.com:BenDol/Databinder</developerConnection>
+        <url>git@github.com:BenDol/Databinder</url>
     </scm>
 
     <properties>
