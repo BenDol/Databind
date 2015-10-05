@@ -20,7 +20,7 @@ import nz.co.doltech.databinder.databinding.gwt.Binder;
 public class HasValueDataBindingGwtTest extends GWTTestCase {
     @Override
     public String getModuleName() {
-        return "nz.co.doltech.databinder.databinding.HexaBindingTest";
+        return "nz.co.doltech.databinder.databinding.DatabindingTest";
     }
 
     @Override

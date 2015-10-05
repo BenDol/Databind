@@ -14,7 +14,7 @@ import nz.co.doltech.databinder.databinding.watchablecollection.WatchableCollect
 public class WatchableCollectionGwtTest extends GWTTestCase {
     @Override
     public String getModuleName() {
-        return "nz.co.doltech.databinder.databinding.HexaBindingTest";
+        return "nz.co.doltech.databinder.databinding.DatabindingTest";
     }
 
     public void testA() {
