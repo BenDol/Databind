@@ -33,5 +33,5 @@ public interface Clazz<T> {
 
     Method getMethod(String methodName);
 
-    T NEW();
+    T newInstance();
 }

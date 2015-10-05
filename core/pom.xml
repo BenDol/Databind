@@ -8,8 +8,8 @@
         <artifactId>databinder</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-    
-    <artifactId>core</artifactId>
+
+    <artifactId>databinder-core</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     
@@ -22,11 +22,11 @@
     <dependencies>
         <dependency>
             <groupId>nz.co.doltech</groupId>
-            <artifactId>apt</artifactId>
+            <artifactId>databinder-apt</artifactId>
         </dependency>
         <dependency>
             <groupId>nz.co.doltech</groupId>
-            <artifactId>util</artifactId>
+            <artifactId>databinder-util</artifactId>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

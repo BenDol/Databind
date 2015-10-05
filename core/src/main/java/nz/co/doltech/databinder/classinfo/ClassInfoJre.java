@@ -159,7 +159,7 @@ class ClazzJre<T> implements Clazz<T> {
     }
 
     @Override
-    public T NEW() {
+    public T newInstance() {
         T result;
         try {
             result = classs.newInstance();

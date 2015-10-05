@@ -171,7 +171,7 @@ class ClazzInfoBuilder {
 
         // New
         sourceWriter.println("@Override");
-        sourceWriter.println("public " + reflectedTypeName + " NEW()");
+        sourceWriter.println("public " + reflectedTypeName + " newInstance()");
         sourceWriter.println("{");
         sourceWriter.indent();
         if (reflectedType.isAbstract()) {

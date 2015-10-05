@@ -92,7 +92,7 @@ public class JavaScriptObjectClazz implements Clazz<JavaScriptObject> {
     }
 
     @Override
-    public JavaScriptObject NEW() {
+    public JavaScriptObject newInstance() {
         throw new RuntimeException("Cannot create a JavaScriptObject");
     }
 
