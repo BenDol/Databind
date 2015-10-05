@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 1.7.1//EN"
+        "http://google-web-toolkit.googlecode.com/svn/tags/1.7.1/distro-source/core/src/gwt-module.dtd">
+<module>
+    <inherits name='com.google.gwt.user.User'/>
+    <inherits name='nz.co.doltech.databinder.Util'/>
+
+    <super-source path="classinfo/gwt/emul"/>
+
+    <source path="classinfo" excludes="classinfo/gwt/rebind,classinfo/gwt/emul"/>
+
+    <generate-with class="nz.co.doltech.databinder.classinfo.gwt.rebind.ClazzIncrementalGenerator">
+        <when-type-assignable class="nz.co.doltech.databinder.classinfo.Clazz"/>
+    </generate-with>
+
+    <generate-with class="nz.co.doltech.databinder.classinfo.gwt.rebind.ClazzBundleIncrementalGenerator">
+        <when-type-assignable class="nz.co.doltech.databinder.classinfo.gwt.ClazzBundle"/>
+    </generate-with>
+</module>

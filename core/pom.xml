@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>nz.co.doltech</groupId>
+        <artifactId>databinder</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    
+    <artifactId>core</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+    
+    <name>core</name>
+    <description>HexaBinding is a tool used when some data binding repetitive glue code is written by the developer.
+        This library does it instead.
+    </description>
+    <url>http://www.doltech.co.nz/hexabinding</url>
+    
+    <dependencies>
+        <dependency>
+            <groupId>nz.co.doltech</groupId>
+            <artifactId>apt</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>nz.co.doltech</groupId>
+            <artifactId>util</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
+    </dependencies>
+</project>
