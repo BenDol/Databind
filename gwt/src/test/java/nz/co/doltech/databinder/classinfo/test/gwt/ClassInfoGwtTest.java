@@ -16,7 +16,7 @@ interface TestClazzBundle extends ClazzBundle {
 public class ClassInfoGwtTest extends GWTTestCase {
     @Override
     public String getModuleName() {
-        return "nz.co.doltech.databinder.classinfo.HexaClassInfoTest";
+        return "nz.co.doltech.databinder.classinfo.ClassInfoTest";
     }
 
     @Override
