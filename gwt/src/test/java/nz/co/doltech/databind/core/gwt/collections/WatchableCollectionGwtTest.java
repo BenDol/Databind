@@ -57,8 +57,6 @@ public class WatchableCollectionGwtTest extends GWTTestCase {
     }
 
     public void testB() {
-        MyClassBundle bundle = GWT.create(MyClassBundle.class);
-        bundle.register();
 
         A a = new A();
         A b = new A();

@@ -18,9 +18,6 @@ package nz.co.doltech.databind.core.gwt;
 import java.util.HashMap;
 import java.util.List;
 
-import nz.co.doltech.databind.gwt.annotation.Observable;
-
-@Observable
 public class SampleDTO1 {
     String tata;
     int toto;

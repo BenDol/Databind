@@ -6,7 +6,7 @@
 
     <groupId>nz.co.doltech</groupId>
     <artifactId>databind</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.1-SNAPSHOT</version>
 
     <packaging>pom</packaging>
 
@@ -14,11 +14,11 @@
     <url>http://www.doltech.co.nz</url>
 
     <modules>
+        <module>util</module>
         <module>core</module>
         <module>apt</module>
-        <module>classinfo</module>
+        <module>reflect</module>
         <module>gwt</module>
-        <module>util</module>
     </modules>
 
     <licenses>
@@ -47,7 +47,23 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <mavenVersion>3.0</mavenVersion>
         <gwt.version>[2.7.0,)</gwt.version>
+        <velocity.version>1.7</velocity.version>
+        <guice.version>3.0</guice.version>
+        <javax.inject.version>1</javax.inject.version>
+        <junit.version>3.8.1</junit.version>
+        <plexus-utils.version>3.0.8</plexus-utils.version>
+        <ph-css.version>3.9.1</ph-css.version>
+        <javapoet.version>1.0.0</javapoet.version>
+        <logback.version>1.1.2</logback.version>
+        <maven-project.version>2.2.1</maven-project.version>
+
+        <maven-plugin-api.version>2.0</maven-plugin-api.version>
+        <maven-plugin-annotations.version>3.2</maven-plugin-annotations.version>
         <maven-source-plugin.version>2.3</maven-source-plugin.version>
+        <maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>
+        <maven-surefire-plugin.version>2.12.4</maven-surefire-plugin.version>
+        <nexus-staging-maven-plugin.version>1.6.3</nexus-staging-maven-plugin.version>
+        <maven-javadoc-plugin.version>2.10.3</maven-javadoc-plugin.version>
     </properties>
 
     <distributionManagement>
@@ -63,43 +79,41 @@
 
     <dependencyManagement>
         <dependencies>
+            <!-- Internal -->
             <dependency>
                 <groupId>nz.co.doltech</groupId>
                 <artifactId>databind-core</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <version>1.1-SNAPSHOT</version>
             </dependency>
-
             <dependency>
                 <groupId>nz.co.doltech</groupId>
-                <artifactId>databind-classinfo</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <artifactId>databind-reflect</artifactId>
+                <version>1.1-SNAPSHOT</version>
             </dependency>
-            
             <dependency>
                 <groupId>nz.co.doltech</groupId>
                 <artifactId>databind-apt</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <version>1.1-SNAPSHOT</version>
             </dependency>
-            
             <dependency>
                 <groupId>nz.co.doltech</groupId>
                 <artifactId>databind-gwt</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <version>1.1-SNAPSHOT</version>
             </dependency>
-
             <dependency>
                 <groupId>nz.co.doltech</groupId>
                 <artifactId>databind-util</artifactId>
-                <version>1.0-SNAPSHOT</version>
-            </dependency>
-            
-            <dependency>
-                <groupId>junit</groupId>
-                <artifactId>junit</artifactId>
-                <version>3.8.1</version>
-                <scope>test</scope>
+                <version>1.1-SNAPSHOT</version>
             </dependency>
 
+            <!-- Javax -->
+            <dependency>
+                <groupId>javax.inject</groupId>
+                <artifactId>javax.inject</artifactId>
+                <version>${javax.inject.version}</version>
+            </dependency>
+
+            <!-- Google Web Toolkit -->
             <dependency>
                 <groupId>com.google.gwt</groupId>
                 <artifactId>gwt-user</artifactId>
@@ -123,42 +137,80 @@
                 <version>${gwt.version}</version>
                 <scope>runtime</scope>
             </dependency>
+
+            <!-- Guice -->
             <dependency>
-                <groupId>org.apache.maven</groupId>
-                <artifactId>maven-plugin-api</artifactId>
-                <version>2.0</version>
+                <groupId>com.google.inject</groupId>
+                <artifactId>guice</artifactId>
+                <version>${guice.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.maven.plugin-tools</groupId>
-                <artifactId>maven-plugin-annotations</artifactId>
-                <version>3.2</version>
-                <scope>provided</scope>
+                <groupId>com.google.inject.extensions</groupId>
+                <artifactId>guice-assistedinject</artifactId>
+                <version>${guice.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.google.inject.extensions</groupId>
+                <artifactId>guice-multibindings</artifactId>
+                <version>${guice.version}</version>
+            </dependency>
+
+            <!-- Utils -->
             <dependency>
                 <groupId>org.codehaus.plexus</groupId>
                 <artifactId>plexus-utils</artifactId>
-                <version>3.0.8</version>
+                <version>${plexus-utils.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.maven</groupId>
                 <artifactId>maven-project</artifactId>
-                <version>2.2.1</version>
+                <version>${maven-project.version}</version>
                 <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>com.helger</groupId>
                 <artifactId>ph-css</artifactId>
-                <version>3.9.1</version>
+                <version>${ph-css.version}</version>
             </dependency>
+
+            <!-- APT -->
             <dependency>
                 <groupId>com.squareup</groupId>
                 <artifactId>javapoet</artifactId>
-                <version>1.0.0</version>
+                <version>${javapoet.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.apache.velocity</groupId>
+                <artifactId>velocity</artifactId>
+                <version>${velocity.version}</version>
+            </dependency>
+
+            <!-- Logger -->
             <dependency>
                 <groupId>ch.qos.logback</groupId>
                 <artifactId>logback-classic</artifactId>
-                <version>1.1.2</version>
+                <version>${logback.version}</version>
+            </dependency>
+
+            <!-- Plugins -->
+            <dependency>
+                <groupId>org.apache.maven</groupId>
+                <artifactId>maven-plugin-api</artifactId>
+                <version>${maven-plugin-api.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.maven.plugin-tools</groupId>
+                <artifactId>maven-plugin-annotations</artifactId>
+                <version>${maven-plugin-annotations.version}</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <!-- Test -->
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${junit.version}</version>
+                <scope>test</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -167,7 +219,7 @@
             <plugins>
                 <plugin>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.1</version>
+                    <version>${maven-compiler-plugin.version}</version>
                     <configuration>
                         <source>1.7</source>
                         <target>1.7</target>
@@ -191,7 +243,7 @@
 
                 <plugin>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>2.12.4</version>
+                    <version>${maven-surefire-plugin.version}</version>
                     <configuration>
                         <excludes>
                             <exclude>**/*GwtTest.java</exclude>
@@ -203,7 +255,7 @@
                 <plugin>
                     <groupId>org.sonatype.plugins</groupId>
                     <artifactId>nexus-staging-maven-plugin</artifactId>
-                    <version>1.6.3</version>
+                    <version>${nexus-staging-maven-plugin.version}</version>
                     <extensions>true</extensions>
                     <configuration>
                         <serverId>ossrh</serverId>
@@ -261,7 +313,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>2.10.3</version>
+                        <version>${maven-javadoc-plugin.version}</version>
                         <executions>
                             <execution>
                                 <id>attach-javadocs</id>

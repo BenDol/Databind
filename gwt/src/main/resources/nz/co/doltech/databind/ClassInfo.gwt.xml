@@ -5,15 +5,15 @@
     <inherits name='com.google.gwt.user.User'/>
     <inherits name='nz.co.doltech.databind.Util'/>
 
-    <super-source path="classinfo/gwt/emul"/>
+    <super-source path="reflect/gwt/emul"/>
 
-    <source path="classinfo" excludes="classinfo/gwt/rebind,classinfo/gwt/emul"/>
+    <source path="reflect" excludes="reflect/gwt/rebind,reflect/gwt/emul"/>
 
-    <generate-with class="nz.co.doltech.databind.classinfo.gwt.rebind.ClazzIncrementalGenerator">
-        <when-type-assignable class="nz.co.doltech.databind.classinfo.Clazz"/>
+    <generate-with class="nz.co.doltech.databind.reflect.gwt.rebind.ClazzIncrementalGenerator">
+        <when-type-assignable class="nz.co.doltech.databind.reflect.Clazz"/>
     </generate-with>
 
-    <generate-with class="nz.co.doltech.databind.classinfo.gwt.rebind.ClazzBundleIncrementalGenerator">
-        <when-type-assignable class="nz.co.doltech.databind.classinfo.gwt.ClazzBundle"/>
+    <generate-with class="nz.co.doltech.databind.reflect.gwt.rebind.ClazzBundleIncrementalGenerator">
+        <when-type-assignable class="nz.co.doltech.databind.reflect.gwt.ClazzBundle"/>
     </generate-with>
 </module>

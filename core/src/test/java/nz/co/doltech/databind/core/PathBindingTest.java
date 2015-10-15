@@ -20,13 +20,13 @@ import java.util.Date;
 import java.util.List;
 
 import junit.framework.TestCase;
-import nz.co.doltech.databind.core.dto.ObservableWorkplace;
 import nz.co.doltech.databind.core.dto.Person;
+import nz.co.doltech.databind.core.dto.Workplace;
 import nz.co.doltech.databind.core.properties.Properties;
 
 public class PathBindingTest extends TestCase {
     public void test() {
-        List<ObservableWorkplace> places = new ArrayList<>();
+        List<Workplace> places = new ArrayList<>();
         for (int i = 0; i < 10; i++)
             places.add(workplace());
 
@@ -34,7 +34,7 @@ public class PathBindingTest extends TestCase {
         for (int i = 0; i < 100; i++)
             persons.add(person(places));
 
-        for (ObservableWorkplace w : places)
+        for (Workplace w : places)
             w.setOwner(persons.get((int) (Math.random() * persons.size())));
 
         Person personCopy = new Person();
@@ -50,8 +50,8 @@ public class PathBindingTest extends TestCase {
         }
     }
 
-    private ObservableWorkplace workplace() {
-        ObservableWorkplace r = new ObservableWorkplace();
+    private Workplace workplace() {
+        Workplace r = new Workplace();
 
         r.setName(TestUtils.randomName());
         r.setColor(TestUtils.randomColor());
@@ -59,7 +59,7 @@ public class PathBindingTest extends TestCase {
         return r;
     }
 
-    private Person person(List<ObservableWorkplace> places) {
+    private Person person(List<Workplace> places) {
         Person p = new Person();
 
         p.setName(TestUtils.randomName());

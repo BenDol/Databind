@@ -1,0 +1,26 @@
+import java.util.List;
+import java.util.ArrayList;
+
+import nz.co.doltech.databind.reflect.Reflection;
+import nz.co.doltech.databind.reflect.Field;
+import nz.co.doltech.databind.reflect.base.ClazzBase;
+import nz.co.doltech.databind.reflect.base.FieldBase;
+
+public class ${implName} extends ClazzBase<${targetName}> {
+    public ${implName}() {
+        super(${targetName}.class, "$targetName", ${superClass}.class);
+    }
+
+    protected void ensureSuperClassInfoRegistered() {
+        Reflection.registerClazz(new ${superClass}ClazzImpl());
+    }
+
+#foreach( $field in $fields )
+    static class ${field}_FieldImpl extends FieldBase {
+        public ${field}_FieldImpl() {
+            super()
+        }
+    }
+#end
+
+}

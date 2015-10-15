@@ -15,12 +15,8 @@
  */
 package nz.co.doltech.databind.core.gwt;
 
-import java.util.HashMap;
 import java.util.List;
 
-import nz.co.doltech.databind.gwt.annotation.Observable;
-
-@Observable
 public class SampleDTO2 {
     String tata;
     int toto;
@@ -38,8 +34,6 @@ public class SampleDTO2 {
 
     List<Object> os;
 
-    HashMap<String, List<ObservableSampleDTO1>> map;
-
     // self reference
     SampleDTO2 titi2;
 
@@ -48,13 +42,4 @@ public class SampleDTO2 {
     List<SampleDTO1> titis;
 
     List<SampleDTO1> totos4;
-
-    // does not work, give <any>
-    //ObservableSampleDTO3<Integer> toto2;
-
-    // does not work, give List<<any>>
-    //List<ObservableSampleDTO3<Integer>> totos2;
-
-    // does not work, give List<<any>>
-    //List<ObservableSampleDTO3<Integer>> totos3;
 }

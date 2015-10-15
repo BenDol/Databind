@@ -21,7 +21,7 @@ import nz.co.doltech.databind.core.properties.Properties;
 
 public class Person {
     private String name;
-    private ObservableWorkplace workplace;
+    private Workplace workplace;
     private Date birthDate;
 
     public String getName() {
@@ -33,11 +33,11 @@ public class Person {
         Properties.notify(this, "name");
     }
 
-    public ObservableWorkplace getWorkplace() {
+    public Workplace getWorkplace() {
         return workplace;
     }
 
-    public void setWorkplace(ObservableWorkplace workplace) {
+    public void setWorkplace(Workplace workplace) {
         this.workplace = workplace;
         Properties.notify(this, "workplace");
     }
