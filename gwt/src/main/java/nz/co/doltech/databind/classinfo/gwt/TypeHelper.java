@@ -17,17 +17,9 @@ package nz.co.doltech.databind.classinfo.gwt;
 
 import com.google.gwt.core.ext.typeinfo.JClassType;
 import com.google.gwt.core.ext.typeinfo.JMethod;
-import nz.co.doltech.databind.util.StringUtils;
+import nz.co.doltech.databind.util.MethodHelper;
 
 public class TypeHelper {
-
-    public static final String[] GETTER_PREFIXES = new String[]{
-        "get", "is"
-    };
-
-    public static final String[] SETTER_PREFIXES = new String[]{
-        "set"
-    };
 
     public static <T> boolean isInstanceOf(JClassType classType, Class<T> interfaceType) {
         for (JClassType type : classType.getImplementedInterfaces()) {
@@ -39,23 +31,6 @@ public class TypeHelper {
     }
 
     public static String stripSetterOrGetterPrefix(JMethod method) {
-        String result = method.getName();
-
-        for (String prefix : GETTER_PREFIXES) {
-            if (result.length() > prefix.length() && result.startsWith(prefix)
-                    && Character.isUpperCase(result.charAt(prefix.length()))) {
-                result = StringUtils.lowerFirstLetter(result.substring(prefix.length()));
-                return result;
-            }
-        }
-
-        for (String prefix : SETTER_PREFIXES) {
-            if (result.length() > prefix.length() && result.startsWith(prefix)
-                    && Character.isUpperCase(result.charAt(prefix.length()))) {
-                result = StringUtils.lowerFirstLetter(result.substring(prefix.length()));
-                return result;
-            }
-        }
-        return result;
+        return MethodHelper.stripSetterOrGetterPrefix(method.getName());
     }
 }

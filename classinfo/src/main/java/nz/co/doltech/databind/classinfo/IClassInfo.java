@@ -30,8 +30,6 @@ public interface IClassInfo {
 
     /**
      * Register a runtime type information provider
-     *
-     * @param clazz
      */
     <T> void registerClazz(Clazz<T> clazz);
 
@@ -52,9 +50,7 @@ public interface IClassInfo {
     <T> Clazz<T> findClazz(Class<T> clazz);
 
     /**
-     * Retrieve the set of registered type information providers
-     *
-     * @return
+     * Retrieve the set of registered type information providers.
      */
     Set<Class<?>> getRegisteredClazz();
 }

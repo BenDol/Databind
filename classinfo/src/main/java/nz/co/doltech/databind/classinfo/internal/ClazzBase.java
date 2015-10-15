@@ -103,17 +103,20 @@ public abstract class ClazzBase<T> implements Clazz<T> {
 
     @Override
     public List<Field> getDeclaredFields() {
-        if (_declaredFields == null)
+        if (_declaredFields == null) {
             _declaredFields = _getDeclaredFields();
+        }
 
         return _declaredFields;
     }
 
     @Override
     public Field getDeclaredField(String name) {
-        for (Field field : getDeclaredFields())
-            if (field.getName().equals(name))
+        for (Field field : getDeclaredFields()) {
+            if (field.getName().equals(name)) {
                 return field;
+            }
+        }
 
         return null;
     }
@@ -124,14 +127,16 @@ public abstract class ClazzBase<T> implements Clazz<T> {
             // all public declared fields
             _fields = new ArrayList<Field>();
             for (Field field : getDeclaredFields()) {
-                if ((field.getModifier() & /*Modifier.PUBLIC*/1) == /*Modifier.PUBLIC*/1)
+                if ((field.getModifier() & /*Modifier.PUBLIC*/1) == /*Modifier.PUBLIC*/1) {
                     _fields.add(field);
+                }
             }
 
             // all public declared fields of superclass
             Clazz<? super T> superClass = getSuperclass();
-            if (superClass != null)
+            if (superClass != null) {
                 _fields.addAll(superClass.getDeclaredFields());
+            }
         }
 
         return _fields;
@@ -139,9 +144,11 @@ public abstract class ClazzBase<T> implements Clazz<T> {
 
     @Override
     public Field getField(String fieldName) {
-        for (Field field : getFields())
-            if (field.getName().equals(fieldName))
+        for (Field field : getFields()) {
+            if (field.getName().equals(fieldName)) {
                 return field;
+            }
+        }
         return null;
     }
 
@@ -157,9 +164,11 @@ public abstract class ClazzBase<T> implements Clazz<T> {
 
     @Override
     public Method getMethod(String methodName) {
-        for (Method method : getMethods())
-            if (method.getName().equals(methodName))
+        for (Method method : getMethods()) {
+            if (method.getName().equals(methodName)) {
                 return method;
+            }
+        }
         return null;
     }
 }

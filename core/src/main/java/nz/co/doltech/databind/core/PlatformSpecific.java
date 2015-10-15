@@ -41,5 +41,5 @@ public interface PlatformSpecific {
 
     boolean isSpecificDataAdapter(Object object);
 
-    void fillSpecificDataAdapter(Object widget, Object context, String property, Class<?> srcPptyType, DataAdapterInfo res);
+    void processDataAdapter(Object widget, Object context, String property, Class<?> srcPptyType, DataAdapterInfo res);
 }

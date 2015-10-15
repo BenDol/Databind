@@ -82,7 +82,7 @@ class PlatformSpecificJre implements PlatformSpecific {
     }
 
     @Override
-    public void fillSpecificDataAdapter(Object widget, Object context, String property, Class<?> srcPptyType, DataAdapterInfo res) {
+    public void processDataAdapter(Object widget, Object context, String property, Class<?> srcPptyType, DataAdapterInfo res) {
         throw new IllegalStateException();
     }
 }

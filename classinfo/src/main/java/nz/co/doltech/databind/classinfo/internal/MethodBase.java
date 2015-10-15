@@ -16,6 +16,7 @@
 package nz.co.doltech.databind.classinfo.internal;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import nz.co.doltech.databind.classinfo.Method;
@@ -46,9 +47,7 @@ public abstract class MethodBase implements Method {
     public List<Class<?>> getParameterTypes() {
         if (_parameterTypesList == null) {
             _parameterTypesList = new ArrayList<>();
-            for (Class<?> type : _parameterTypes) {
-                _parameterTypesList.add(type);
-            }
+            _parameterTypesList.addAll(Arrays.asList(_parameterTypes));
         }
 
         return _parameterTypesList;

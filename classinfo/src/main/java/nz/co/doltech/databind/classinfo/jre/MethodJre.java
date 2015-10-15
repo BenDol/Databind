@@ -26,8 +26,9 @@ public class MethodJre implements Method {
 
     public MethodJre(java.lang.reflect.Method method) {
         this.method = method;
-        if (!method.isAccessible())
+        if (!method.isAccessible()) {
             method.setAccessible(true);
+        }
     }
 
     @Override
@@ -42,11 +43,11 @@ public class MethodJre implements Method {
 
     @Override
     public List<Class<?>> getParameterTypes() {
-        if (parameterTypes != null)
+        if (parameterTypes != null) {
             return parameterTypes;
+        }
 
         Class<?>[] arr = method.getParameterTypes();
-
         parameterTypes = new ArrayList<>();
 
         for (Class<?> c : arr) {

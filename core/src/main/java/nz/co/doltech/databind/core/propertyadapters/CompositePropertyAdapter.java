@@ -113,8 +113,9 @@ public class CompositePropertyAdapter implements PropertyAdapter {
 
         // remove adapters
         for (int i = 0; i < adapters.length; i++) {
-            if (adapters[i] == null)
+            if (adapters[i] == null) {
                 continue;
+            }
             adapters[i].removePropertyChangedHandler(adapterHandlerRegistrations[i]);
         }
     }
@@ -125,8 +126,9 @@ public class CompositePropertyAdapter implements PropertyAdapter {
         Object object = context;
 
         for (int p = 0; p < path.length; p++) {
-            if (object == null)
+            if (object == null) {
                 return;
+            }
 
             // if no adapter has yet been created for this pathItem
             if (adapters[p] == null) {

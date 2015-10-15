@@ -42,19 +42,23 @@ class PropertyValues {
         ClassInfoCache cache = retrieveCache(clazz);
 
         Class<?> res = cache.getPropertyType(name);
-        if (res != null)
+        if (res != null) {
             return res;
+        }
 
         Class<?> getterType = getGetterPropertyType(clazz, name);
-        if (getterType == null)
+        if (getterType == null) {
             return null;
+        }
 
         Class<?> setterType = getSetterPropertyType(clazz, name);
-        if (setterType == null)
+        if (setterType == null) {
             return null;
+        }
 
-        if (getterType != setterType)
+        if (getterType != setterType) {
             return null;
+        }
 
         cache.setPropertyType(name, getterType);
 

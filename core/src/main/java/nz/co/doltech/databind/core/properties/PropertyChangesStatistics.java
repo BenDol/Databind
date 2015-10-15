@@ -41,8 +41,9 @@ class PropertyChangesStatistics {
             details.append(e.getKey() + " => " + e.getValue());
 
             Integer oldCount = oldCounts.get(e.getKey());
-            if (oldCount != null)
+            if (oldCount != null) {
                 details.append(" (diff: " + (e.getValue() - oldCount) + ")");
+            }
 
             details.append("\n");
         }
@@ -65,8 +66,9 @@ class PropertyChangesStatistics {
 
         String key = info.propertyName + "@" + info.source.getClass().getSimpleName();
         Integer count = counts.get(key);
-        if (count == null)
+        if (count == null) {
             count = 0;
+        }
         count++;
         counts.put(key, count);
     }

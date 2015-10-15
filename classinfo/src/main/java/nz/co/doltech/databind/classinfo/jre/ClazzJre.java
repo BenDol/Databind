@@ -51,15 +51,17 @@ public class ClazzJre<T> implements Clazz<T> {
 
     @Override
     public List<Field> getAllFields() {
-        if (fields != null)
+        if (fields != null) {
             return fields;
+        }
 
         fields = new ArrayList<>();
 
         Class<?> cur = classs;
         while (cur != null && cur != Object.class) {
-            for (java.lang.reflect.Field f : classs.getDeclaredFields())
+            for (java.lang.reflect.Field f : classs.getDeclaredFields()) {
                 fields.add(new FieldJre(f));
+            }
 
             cur = cur.getSuperclass();
         }
@@ -70,8 +72,9 @@ public class ClazzJre<T> implements Clazz<T> {
     @Override
     public Field getAllField(String fieldName) {
         for (Field field : getAllFields()) {
-            if (field.getName().equals(fieldName))
+            if (field.getName().equals(fieldName)) {
                 return field;
+            }
         }
         return null;
     }
@@ -102,13 +105,15 @@ public class ClazzJre<T> implements Clazz<T> {
 
     @Override
     public List<Method> getMethods() {
-        if (methods != null)
+        if (methods != null) {
             return methods;
+        }
 
         methods = new ArrayList<>();
 
-        for (java.lang.reflect.Method m : classs.getMethods())
+        for (java.lang.reflect.Method m : classs.getMethods()) {
             methods.add(new MethodJre(m));
+        }
 
         return methods;
     }
@@ -117,8 +122,9 @@ public class ClazzJre<T> implements Clazz<T> {
     public Method getMethod(String methodName) {
         if (methodsByName == null) {
             methodsByName = new HashMap<>();
-            for (Method m : getMethods())
+            for (Method m : getMethods()) {
                 methodsByName.put(m.getName(), m);
+            }
         }
 
         return methodsByName.get(methodName);

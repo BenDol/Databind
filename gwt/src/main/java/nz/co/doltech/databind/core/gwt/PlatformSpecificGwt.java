@@ -49,10 +49,11 @@ public final class PlatformSpecificGwt implements PlatformSpecific {
 
     @Override
     public DynamicPropertyBag getObjectDynamicPropertyBag(Object object) {
-        if (GWT.isScript())
+        if (GWT.isScript()) {
             return getObjectDynamicPropertyBagImpl(object);
-        else
+        } else {
             return DynamicPropertyBagAccessJre.getObjectDynamicPropertyBag(object);
+        }
     }
 
     private native DynamicPropertyBag getObjectDynamicPropertyBagImpl(Object object) /*-{
@@ -61,10 +62,11 @@ public final class PlatformSpecificGwt implements PlatformSpecific {
 
     @Override
     public void setObjectDynamicPropertyBag(Object object, DynamicPropertyBag bag) {
-        if (GWT.isScript())
+        if (GWT.isScript()) {
             setObjectDynamicPropertyBagImpl(object, bag);
-        else
+        } else {
             DynamicPropertyBagAccessJre.setObjectDynamicPropertyBag(object, bag);
+        }
     }
 
     private native void setObjectDynamicPropertyBagImpl(Object object, DynamicPropertyBag bag) /*-{
@@ -101,10 +103,11 @@ public final class PlatformSpecificGwt implements PlatformSpecific {
 
     @Override
     public void setObjectMetadata(Object object, Object metadata) {
-        if (GWT.isScript())
+        if (GWT.isScript()) {
             setObjectMetadataImpl(object, metadata);
-        else
+        } else {
             MetatdataJre.setObjectMetadata(object, metadata);
+        }
     }
 
     // Metadata
@@ -115,10 +118,11 @@ public final class PlatformSpecificGwt implements PlatformSpecific {
 
     @Override
     public <T> T getObjectMetadata(Object object) {
-        if (GWT.isScript())
+        if (GWT.isScript()) {
             return getObjectMetadataImpl(object);
-        else
+        } else {
             return MetatdataJre.getObjectMetadata(object);
+        }
     }
 
     private native <T> T getObjectMetadataImpl(Object object) /*-{
@@ -131,25 +135,25 @@ public final class PlatformSpecificGwt implements PlatformSpecific {
     }
 
     @Override
-    public void fillSpecificDataAdapter(Object widget, Object context, String property, Class<?> srcPptyType,
-                                        DataAdapterInfo res) {
+    public void processDataAdapter(Object object, Object context, String property, Class<?> srcType,
+                                   DataAdapterInfo res) {
         // try to guess the HasValue type
         res.setDataType(Object.class);
-        if (widget instanceof HasText) {
+        if (object instanceof HasText) {
             res.setDataType(String.class);
         }
 
         String debugString = "";
 
-        // try to find a converter if dataType does not match srcPptyType
+        // try to find a converter if dataType does not match srcType
         Class<?> dataType = res.getDataType();
-        if (srcPptyType != null && dataType != null && dataType != srcPptyType && srcPptyType != Property.class) {
+        if (srcType != null && dataType != null && dataType != srcType && srcType != Property.class) {
             // try to find a converter, if not : fail
-            res.setConverter(DefaultConverters.findConverter(srcPptyType, dataType));
+            res.setConverter(DefaultConverters.findConverter(srcType, dataType));
             if (res.getConverter() == null) {
-                debugString = "[ERROR: Cannot find converter from " + srcPptyType + " to " + dataType + "]";
+                debugString = "[ERROR: Cannot find converter from " + srcType + " to " + dataType + "]";
             } else {
-                debugString = "[" + srcPptyType.getSimpleName() + ">" + dataType.getSimpleName() + "] " + debugString;
+                debugString = "[" + srcType.getSimpleName() + ">" + dataType.getSimpleName() + "] " + debugString;
             }
         }
 

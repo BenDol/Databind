@@ -26,6 +26,7 @@ import com.google.gwt.user.rebind.ClassSourceFileComposerFactory;
 import com.google.gwt.user.rebind.SourceWriter;
 import nz.co.doltech.databind.classinfo.IgnoreInfo;
 import nz.co.doltech.databind.classinfo.gwt.TypeHelper;
+import nz.co.doltech.databind.util.MethodHelper;
 
 class ClazzInfoBuilder {
     TreeLogger logger;
@@ -159,7 +160,7 @@ class ClazzInfoBuilder {
 
         List<String> methodClassNames = new ArrayList<>();
         for (JMethod method : reflectedType.getMethods()) {
-            if (method.isStatic() || ignoredFields.contains(TypeHelper.stripSetterOrGetterPrefix(method))) {
+            if (method.isStatic() || ignoredFields.contains(MethodHelper.stripSetterOrGetterPrefix(method.getName()))) {
                 continue; // skip
             } else if(method.isAnnotationPresent(IgnoreInfo.class)) {
                 continue; // skip

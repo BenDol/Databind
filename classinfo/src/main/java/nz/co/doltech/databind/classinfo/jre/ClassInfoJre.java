@@ -35,8 +35,9 @@ public class ClassInfoJre implements IClassInfo {
     @Override
     public <T> Clazz<T> clazz(Class<T> clazz) {
         ClazzJre<T> result = findClazz(clazz);
-        if (result == null)
+        if (result == null) {
             throw new RuntimeException("Cannot find class '" + clazz.getName() + "'");
+        }
 
         return result;
     }

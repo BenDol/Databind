@@ -94,12 +94,14 @@ public class WatchableCollectionDeferred<T> implements List<T> {
         }
     }
 
+    @Override
     public void add(int arg0, T arg1) {
         list.add(arg0, arg1);
 
         scheduleChange(new Change(ChangeType.ADD, arg1, arg0));
     }
 
+    @Override
     public boolean add(T arg0) {
         boolean res = list.add(arg0);
 
@@ -108,6 +110,7 @@ public class WatchableCollectionDeferred<T> implements List<T> {
         return res;
     }
 
+    @Override
     public boolean addAll(Collection<? extends T> arg0) {
         int startIndex = list.size();
         boolean res = list.addAll(arg0);
@@ -115,68 +118,83 @@ public class WatchableCollectionDeferred<T> implements List<T> {
         return res;
     }
 
+    @Override
     public boolean addAll(int arg0, Collection<? extends T> arg1) {
         boolean res = list.addAll(arg0, arg1);
         scheduleChanges(Change.ForItems(ChangeType.ADD, arg1, arg0));
         return res;
     }
 
+    @Override
     public void clear() {
         Collection<Change> changes = Change.ForItems(ChangeType.REMOVE, list, 0);
         list.clear();
         scheduleChanges(changes);
     }
 
+    @Override
     public boolean contains(Object arg0) {
         return list.contains(arg0);
     }
 
+    @Override
     public boolean containsAll(Collection<?> arg0) {
         return list.containsAll(arg0);
     }
 
+    @Override
     public boolean equals(Object arg0) {
         return list.equals(arg0);
     }
 
+    @Override
     public T get(int arg0) {
         return list.get(arg0);
     }
 
+    @Override
     public int hashCode() {
         return list.hashCode();
     }
 
+    @Override
     public int indexOf(Object arg0) {
         return list.indexOf(arg0);
     }
 
+    @Override
     public boolean isEmpty() {
         return list.isEmpty();
     }
 
+    @Override
     public Iterator<T> iterator() {
         return list.iterator();
     }
 
+    @Override
     public int lastIndexOf(Object arg0) {
         return list.lastIndexOf(arg0);
     }
 
+    @Override
     public ListIterator<T> listIterator() {
         return list.listIterator();
     }
 
+    @Override
     public ListIterator<T> listIterator(int arg0) {
         return list.listIterator(arg0);
     }
 
+    @Override
     public T remove(int arg0) {
         T res = list.remove(arg0);
         scheduleChange(new Change(ChangeType.REMOVE, res, arg0));
         return res;
     }
 
+    @Override
     public boolean remove(Object arg0) {
         int index = list.indexOf(arg0);
         boolean res = list.remove(arg0);
@@ -184,6 +202,7 @@ public class WatchableCollectionDeferred<T> implements List<T> {
         return res;
     }
 
+    @Override
     public boolean removeAll(Collection<?> arg0) {
         assert false : "This implementation is bugged";
         boolean res = list.removeAll(arg0);
@@ -191,10 +210,12 @@ public class WatchableCollectionDeferred<T> implements List<T> {
         return res;
     }
 
+    @Override
     public boolean retainAll(Collection<?> c) {
-        throw new RuntimeException();
+        throw new UnsupportedOperationException();
     }
 
+    @Override
     public T set(int index, T element) {
         if (list.size() > index)
             scheduleChange(new Change(ChangeType.REMOVE, list.get(index), index));
@@ -203,19 +224,22 @@ public class WatchableCollectionDeferred<T> implements List<T> {
         return list.set(index, element);
     }
 
+    @Override
     public int size() {
         return list.size();
     }
 
+    @Override
     public List<T> subList(int fromIndex, int toIndex) {
         return list.subList(fromIndex, toIndex);
     }
 
+    @Override
     public Object[] toArray() {
         return list.toArray();
     }
 
-    @SuppressWarnings("hiding")
+    @Override
     public <T> T[] toArray(T[] a) {
         return list.toArray(a);
     }

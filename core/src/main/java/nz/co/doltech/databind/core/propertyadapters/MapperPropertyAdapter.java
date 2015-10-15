@@ -27,10 +27,12 @@ public class MapperPropertyAdapter extends WriteOnlyPropertyAdapter {
 
     @Override
     public void setValue(Object object) {
-        if (mapperResources != null)
+        if (mapperResources != null) {
             ModelMapper.freeMapping(mapperResources);
+        }
 
-        if (object != null)
+        if (object != null) {
             mapperResources = ModelMapper.map(object, destinationOfMapping);
+        }
     }
 }

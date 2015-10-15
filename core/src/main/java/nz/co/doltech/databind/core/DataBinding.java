@@ -1,9 +1,3 @@
-package nz.co.doltech.databind.core;
-
-import java.util.logging.Logger;
-
-import nz.co.doltech.databind.util.Action1;
-import nz.co.doltech.databind.core.propertyadapters.ObjectPropertyAdapter;
 /*
  * Copyright 2015 Doltech Systems Ltd.
  *
@@ -19,6 +13,12 @@ import nz.co.doltech.databind.core.propertyadapters.ObjectPropertyAdapter;
  * License for the specific language governing permissions and limitations under
  * the License.
  */
+package nz.co.doltech.databind.core;
+
+import java.util.logging.Logger;
+
+import nz.co.doltech.databind.util.Action1;
+import nz.co.doltech.databind.core.propertyadapters.ObjectPropertyAdapter;
 import nz.co.doltech.databind.core.propertyadapters.PropertyAdapter;
 
 /**

@@ -89,27 +89,32 @@ public class PropertyChanges {
             return;
         }
 
-        if (!(handlerRegistration instanceof HandlerInfo))
+        if (!(handlerRegistration instanceof HandlerInfo)) {
             return;
+        }
 
         HandlerInfo info = (HandlerInfo) handlerRegistration;
 
         HashMap<String, ArrayList<PropertyChangedHandler>> handlersMap =
             PlatformSpecificProvider.get().getObjectMetadata(info.source);
-        if (handlersMap == null)
+        if (handlersMap == null) {
             return;
+        }
 
         ArrayList<PropertyChangedHandler> handlerList = handlersMap.get(info.propertyName);
-        if (handlerList == null)
+        if (handlerList == null) {
             return;
+        }
 
         handlerList.remove(info.handler);
 
-        if (handlerList.isEmpty())
+        if (handlerList.isEmpty()) {
             handlersMap.remove(info.propertyName);
+        }
 
-        if (handlersMap.isEmpty())
+        if (handlersMap.isEmpty()) {
             PlatformSpecificProvider.get().setObjectMetadata(info.source, null);
+        }
 
         stats.statsRemovedRegistration(info);
 
@@ -130,8 +135,9 @@ public class PropertyChanges {
 
         HashMap<String, ArrayList<PropertyChangedHandler>> handlersMap =
             PlatformSpecificProvider.get().getObjectMetadata(sender);
-        if (handlersMap == null)
+        if (handlersMap == null) {
             return;
+        }
 
         PropertyChangedEvent event = null;
 

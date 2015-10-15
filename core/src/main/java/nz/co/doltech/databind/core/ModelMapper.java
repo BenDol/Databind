@@ -26,6 +26,7 @@ import nz.co.doltech.databind.classinfo.Field;
 import nz.co.doltech.databind.classinfo.Method;
 import nz.co.doltech.databind.core.properties.Properties;
 import nz.co.doltech.databind.core.propertyadapters.ObjectPropertyAdapter;
+import nz.co.doltech.databind.util.MethodHelper;
 
 /**
  * A data binding utility for the support of automatic DTO binding.
@@ -40,7 +41,7 @@ public class ModelMapper {
     // around
     // returns mapping resources handle that were created for this mapping
     public static Object map(Object source, Object destination) {
-        List<DataBinding> res = new ArrayList<>();
+        List<DataBinding> dataBindings = new ArrayList<>();
 
         logger.fine("Binding object of class " + getSimpleName(source.getClass())
             + " to another of class " + getSimpleName(destination.getClass()));
@@ -48,55 +49,67 @@ public class ModelMapper {
         Clazz<?> sourceClass = ClassInfo.clazz(source.getClass());
         Clazz<?> destinationClass = ClassInfo.clazz(destination.getClass());
 
-        // registers all possible bindings...
-        HashSet<String> bindedNames = new HashSet<String>();
+        // registers all possible bindings
+        HashSet<String> boundNames = new HashSet<>();
 
-        // fields wise...
-        for (Field field : sourceClass.getAllFields())
-            bindedNames.add(field.getName());
-        for (Field field : destinationClass.getAllFields())
-            bindedNames.add(field.getName());
+        // process the fields
+        for (Field field : sourceClass.getAllFields()) {
+            boundNames.add(field.getName());
+        }
 
-        // ... and method wise
+        for (Field field : destinationClass.getAllFields()) {
+            boundNames.add(field.getName());
+        }
+
+        // process the methods
         for (Method method : sourceClass.getMethods()) {
-            if (!method.getName().startsWith("get") && !method.getName().startsWith("set"))
+            String methodName = method.getName();
+            if (!MethodHelper.isGetterOrSetter(methodName)) {
                 continue;
+            }
 
-            String fieldName = method.getName().substring(3, 4).toLowerCase() + method.getName().substring(4);
-            bindedNames.add(fieldName);
+            String fieldName = methodName.substring(3, 4).toLowerCase() + methodName.substring(4);
+            boundNames.add(fieldName);
         }
+
         for (Method method : destinationClass.getMethods()) {
-            if (!method.getName().startsWith("get") && !method.getName().startsWith("set"))
+            String methodName = method.getName();
+            if (!MethodHelper.isGetterOrSetter(methodName)) {
                 continue;
+            }
 
-            String fieldName = method.getName().substring(3, 4).toLowerCase() + method.getName().substring(4);
-            bindedNames.add(fieldName);
+            String fieldName = methodName.substring(3, 4).toLowerCase() + methodName.substring(4);
+            boundNames.add(fieldName);
         }
 
-        for (String name : bindedNames) {
+        for (String name : boundNames) {
             boolean srcRead = Properties.canAccessField(ClassInfo.clazz(source.getClass()), name);
-            boolean srcWrite = Properties.canSetField(ClassInfo.clazz(source.getClass()), name);
-
-            boolean destinationRead = Properties.canAccessField(ClassInfo.clazz(destination.getClass()), name);
             boolean destinationWrite = Properties.canSetField(ClassInfo.clazz(destination.getClass()), name);
 
             // ensure both have necessary methods or field
-            if (!srcRead || !destinationWrite)
+            if (!srcRead || !destinationWrite) {
                 continue; // bypass
+            }
+
+            boolean srcWrite = Properties.canSetField(ClassInfo.clazz(source.getClass()), name);
+            boolean destinationRead = Properties.canAccessField(ClassInfo.clazz(destination.getClass()), name);
 
             // adjust binding mode according to capabilities
             Mode bindingMode = Mode.OneWay;
-            if (srcWrite && destinationRead)
+            if (srcWrite && destinationRead) {
                 bindingMode = Mode.TwoWay;
+            }
 
             DataAdapterInfo sourceAdapterInfo = createDataAdapter(source, name, null);
-            if (sourceAdapterInfo == null)
+            if (sourceAdapterInfo == null) {
                 continue;
+            }
 
             DataAdapterInfo destinationAdapterInfo = createDataAdapter(destination, name,
                 sourceAdapterInfo.dataType);
-            if (destinationAdapterInfo == null)
+            if (destinationAdapterInfo == null) {
                 continue;
+            }
 
             // bind source, "color" <----> destination, "color.$HasValue"
             String symbol = "";
@@ -119,17 +132,18 @@ public class ModelMapper {
                 bindingMode, destinationAdapterInfo.converter, null);
             binding.activate();
 
-            res.add(binding);
+            dataBindings.add(binding);
         }
 
-        return res;
+        return dataBindings;
     }
 
     @SuppressWarnings("unchecked")
     public static void freeMapping(Object mappingResourceHandle) {
         List<DataBinding> bindings = (List<DataBinding>) mappingResourceHandle;
-        for (DataBinding binding : bindings)
+        for (DataBinding binding : bindings) {
             binding.terminate();
+        }
         bindings.clear();
     }
 
@@ -139,22 +153,24 @@ public class ModelMapper {
     }
 
     static DataAdapterInfo createDataAdapter(Object context, String property, Class<?> srcPptyType) {
-        DataAdapterInfo res = new DataAdapterInfo();
-        res.dataType = Properties.getPropertyType(ClassInfo.clazz(context.getClass()), property);
-        res.debugString = getSimpleName(context.getClass()) + ", ";
+        DataAdapterInfo info = new DataAdapterInfo();
+        info.dataType = Properties.getPropertyType(ClassInfo.clazz(context.getClass()), property);
+        info.debugString = getSimpleName(context.getClass()) + ", ";
 
         // test to see if the asked property is in fact a HasValue widget
-        Object widget = Properties.getValue(context, property);
-        if (PlatformSpecificProvider.get().isSpecificDataAdapter(widget)) {
-            PlatformSpecificProvider.get().fillSpecificDataAdapter(widget, context, property, srcPptyType, res);
+        Object value = Properties.getValue(context, property);
+
+        PlatformSpecific platform = PlatformSpecificProvider.get();
+        if (platform.isSpecificDataAdapter(value)) {
+            platform.processDataAdapter(value, context, property, srcPptyType, info);
         } else {
-            res.debugString += "\"" + property + "\"";
-            res.adapter = new ObjectPropertyAdapter(context, property);
+            info.debugString += "\"" + property + "\"";
+            info.adapter = new ObjectPropertyAdapter(context, property);
         }
 
-        if (res.adapter == null)
+        if (info.adapter == null) {
             return null;
-
-        return res;
+        }
+        return info;
     }
 }
