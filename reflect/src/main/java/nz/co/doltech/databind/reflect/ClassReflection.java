@@ -13,18 +13,31 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package nz.co.doltech.databind.reflect.gwt;
+package nz.co.doltech.databind.reflect;
 
-import com.google.gwt.core.ext.typeinfo.JClassType;
+import java.util.List;
 
-public class TypeHelper {
+/**
+ * Runtime type information interface about a class.
+ */
+public interface ClassReflection<T> {
+    String getClassName();
 
-    public static <T> boolean isInstanceOf(JClassType classType, Class<T> interfaceType) {
-        for (JClassType type : classType.getImplementedInterfaces()) {
-            if (type.getQualifiedSourceName().equals(interfaceType.getName())) {
-                return true;
-            }
-        }
-        return false;
-    }
+    Class<T> getReflectedClass();
+
+    ClassReflection<? super T> getSuperclass();
+
+    List<FieldReflection> getAllFields();
+
+    FieldReflection getAllField(String fieldName);
+
+    List<FieldReflection> getFields();
+
+    FieldReflection getField(String fieldName);
+
+    List<FieldReflection> getDeclaredFields();
+
+    FieldReflection getDeclaredField(String fieldName);
+
+    T newInstance();
 }

@@ -17,30 +17,21 @@ package nz.co.doltech.databind.reflect;
 
 import java.util.Set;
 
-/**
- * Frontal singleton entry point providing the Reflection system API
- */
-public class Reflection {
-    private static ClassInfo impl = ClassInfoProvider.get();
-
+public interface Reflection {
     /**
-     * Obtain a runtime type information on a class.<br><br>
+     * Obtain a runtime type information on a class.<br/><br/>
      * <p/>
      * Throws a RuntimeException if the type information provider is not found.
      *
      * @param clazz The class object for which type information is required
      * @return The runtime information interface
      */
-    public static <T> Clazz<T> clazz(Class<T> clazz) {
-        return impl.clazz(clazz);
-    }
+    <T> ClassReflection<T> reflect(Class<T> clazz);
 
     /**
      * Register a runtime type information provider
      */
-    public static <T> void registerClazz(Clazz<T> clazz) {
-        impl.registerClazz(clazz);
-    }
+    <T> void registerClass(ClassReflection<T> clazz);
 
     /**
      * Obtain a runtime type information on a class.
@@ -48,9 +39,7 @@ public class Reflection {
      * @param name Name of the class for which type information is required
      * @return The runtime information interface
      */
-    public static Clazz<?> findClazz(String name) {
-        return impl.findClazz(name);
-    }
+    ClassReflection<?> findClass(String name);
 
     /**
      * Obtain a runtime type information on a class.
@@ -58,14 +47,10 @@ public class Reflection {
      * @param clazz The class object for which type information is required
      * @return The runtime information interface
      */
-    public static <T> Clazz<T> findClazz(Class<T> clazz) {
-        return impl.findClazz(clazz);
-    }
+    <T> ClassReflection<T> findClass(Class<T> clazz);
 
     /**
      * Retrieve the set of registered type information providers.
      */
-    public static Set<Class<?>> getRegisteredClazz() {
-        return impl.getAllRegistered();
-    }
+    Set<Class<?>> getAllRegistered();
 }

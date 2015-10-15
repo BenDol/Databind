@@ -15,17 +15,17 @@
  */
 package nz.co.doltech.databind.reflect.jre;
 
-import nz.co.doltech.databind.reflect.Clazz;
-import nz.co.doltech.databind.reflect.Field;
+import nz.co.doltech.databind.reflect.ClassReflection;
+import nz.co.doltech.databind.reflect.FieldReflection;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ClazzJre<T> implements Clazz<T> {
+public class ClassReflectionJre<T> implements ClassReflection<T> {
     private Class<T> classs;
-    private List<Field> fields;
+    private List<FieldReflection> fields;
 
-    public ClazzJre(Class<T> classs) {
+    public ClassReflectionJre(Class<T> classs) {
         this.classs = classs;
     }
 
@@ -40,12 +40,12 @@ public class ClazzJre<T> implements Clazz<T> {
     }
 
     @Override
-    public Clazz<? super T> getSuperclass() {
-        return ClassInfoJre.get().clazz(classs.getSuperclass());
+    public ClassReflection<? super T> getSuperclass() {
+        return ReflectionJre.get().reflect(classs.getSuperclass());
     }
 
     @Override
-    public List<Field> getAllFields() {
+    public List<FieldReflection> getAllFields() {
         if (fields != null) {
             return fields;
         }
@@ -54,8 +54,8 @@ public class ClazzJre<T> implements Clazz<T> {
 
         Class<?> cur = classs;
         while (cur != null && cur != Object.class) {
-            for (java.lang.reflect.Field f : classs.getDeclaredFields()) {
-                fields.add(new FieldJre(f));
+            for (java.lang.reflect.Field f : cur.getDeclaredFields()) {
+                fields.add(new FieldReflectionJre(f));
             }
 
             cur = cur.getSuperclass();
@@ -65,8 +65,8 @@ public class ClazzJre<T> implements Clazz<T> {
     }
 
     @Override
-    public Field getAllField(String fieldName) {
-        for (Field field : getAllFields()) {
+    public FieldReflection getAllField(String fieldName) {
+        for (FieldReflection field : getAllFields()) {
             if (field.getName().equals(fieldName)) {
                 return field;
             }
@@ -75,25 +75,25 @@ public class ClazzJre<T> implements Clazz<T> {
     }
 
     @Override
-    public List<Field> getFields() {
+    public List<FieldReflection> getFields() {
         // TODO
         return getAllFields();
     }
 
     @Override
-    public Field getField(String fieldName) {
+    public FieldReflection getField(String fieldName) {
         // TODO
         return getAllField(fieldName);
     }
 
     @Override
-    public List<Field> getDeclaredFields() {
+    public List<FieldReflection> getDeclaredFields() {
         // TODO
         return getAllFields();
     }
 
     @Override
-    public Field getDeclaredField(String fieldName) {
+    public FieldReflection getDeclaredField(String fieldName) {
         // TODO
         return getAllField(fieldName);
     }

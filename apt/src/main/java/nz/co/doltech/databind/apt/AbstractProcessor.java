@@ -88,10 +88,14 @@ public abstract class AbstractProcessor extends javax.annotation.processing.Abst
                 }
             }
         }
-        return true;
+        return doFinalize();
     }
 
     protected abstract void doProcess(ProcessorInfo procInfo) throws IOException;
+
+    protected boolean doFinalize() {
+        return true; // Nothing by default
+    }
 
     public ProcessorInfo getProcInfo() {
         return procInfo;

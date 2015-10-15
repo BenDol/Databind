@@ -15,10 +15,10 @@
  */
 package nz.co.doltech.databind.reflect;
 
-import nz.co.doltech.databind.reflect.gwt.ClassInfoGwt;
+import nz.co.doltech.databind.reflect.gwt.ReflectionGwt;
 
-public class ClassInfoProvider {
-    public static ClassInfo get() {
-        return new ClassInfoGwt();
+public class ReflectionProvider {
+    public static Reflection get() {
+        return new ReflectionGwt();
     }
 }

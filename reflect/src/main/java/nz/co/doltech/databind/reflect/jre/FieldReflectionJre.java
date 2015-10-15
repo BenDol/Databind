@@ -15,15 +15,16 @@
  */
 package nz.co.doltech.databind.reflect.jre;
 
-import nz.co.doltech.databind.reflect.Field;
+import nz.co.doltech.databind.reflect.FieldReflection;
 
-public class FieldJre implements Field {
+public class FieldReflectionJre implements FieldReflection {
     private java.lang.reflect.Field field;
 
-    public FieldJre(java.lang.reflect.Field field) {
+    public FieldReflectionJre(java.lang.reflect.Field field) {
         this.field = field;
-        if (!field.isAccessible())
+        if (!field.isAccessible()) {
             field.setAccessible(true);
+        }
     }
 
     @Override
@@ -46,10 +47,10 @@ public class FieldJre implements Field {
     }
 
     @Override
-    public <OUT> OUT getValue(Object object) {
+    public <T> T getValue(Object object) {
         try {
             @SuppressWarnings("unchecked")
-            OUT result = (OUT) field.get(object);
+            T result = (T) field.get(object);
             return result;
         } catch (Exception e) {
             throw new RuntimeException(e);

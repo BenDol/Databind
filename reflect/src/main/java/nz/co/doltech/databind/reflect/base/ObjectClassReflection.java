@@ -18,16 +18,16 @@ package nz.co.doltech.databind.reflect.base;
 import java.util.ArrayList;
 import java.util.List;
 
-import nz.co.doltech.databind.reflect.Field;
+import nz.co.doltech.databind.reflect.FieldReflection;
 
-public class ObjectClazz extends ClazzBase<Object> {
+public class ObjectClassReflection extends ClassReflectionBase<Object> {
 
-    public ObjectClazz() {
+    public ObjectClassReflection() {
         super(Object.class, "Object", null);
     }
 
     @Override
-    protected List<Field> _getDeclaredFields() {
+    protected List<FieldReflection> loadDeclaredFields() {
         return new ArrayList<>();
     }
 

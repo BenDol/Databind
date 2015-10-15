@@ -19,9 +19,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import nz.co.doltech.databind.reflect.Reflection;
-import nz.co.doltech.databind.reflect.Clazz;
-import nz.co.doltech.databind.reflect.Field;
+import nz.co.doltech.databind.reflect.ClassReflection;
+import nz.co.doltech.databind.reflect.Reflections;
+import nz.co.doltech.databind.reflect.FieldReflection;
 import nz.co.doltech.databind.core.PlatformSpecific;
 import nz.co.doltech.databind.core.PlatformSpecificProvider;
 import nz.co.doltech.databind.core.propertyadapters.CompositePropertyAdapter;
@@ -62,7 +62,7 @@ class PropertyAccessImpl implements PropertyAccessor {
         if(object == null) {
             return false;
         }
-        Clazz<?> s = Reflection.clazz(object.getClass());
+        ClassReflection<?> s = Reflections.reflect(object.getClass());
 
         if (Property.class == getFieldClassType(s, propertyName)) {
             Property<Object> property = getPropertyImpl(object, propertyName);
@@ -77,19 +77,19 @@ class PropertyAccessImpl implements PropertyAccessor {
     }
 
     @Override
-    public boolean hasFieldAccess(Clazz<?> clazz, String name) {
+    public boolean hasFieldAccess(ClassReflection<?> clazz, String name) {
         return getFieldClassType(clazz, name) != null;
     }
 
     @Override
-    public Class<?> getFieldClassType(Clazz<?> clazz, String name) {
+    public Class<?> getFieldClassType(ClassReflection<?> clazz, String name) {
         PropertyTypeCache cache = getCache(clazz);
 
         Class<?> res = cache.getPropertyType(name);
         if (res != null) {
             return res;
         } else {
-            Field field = clazz.getAllField(name);
+            FieldReflection field = clazz.getAllField(name);
             if (field != null) {
                 res = field.getType();
 
@@ -142,10 +142,10 @@ class PropertyAccessImpl implements PropertyAccessor {
             return getObjectDynamicProperty(object, name);
         }
 
-        Clazz<?> s = Reflection.clazz(object.getClass());
+        ClassReflection<?> s = Reflections.reflect(object.getClass());
 
         // try direct field access
-        Field field = s.getAllField(name);
+        FieldReflection field = s.getAllField(name);
         if (field != null)
             return field.getValue(object);
 
@@ -157,14 +157,14 @@ class PropertyAccessImpl implements PropertyAccessor {
         return null;
     }
 
-    private boolean setPropertyImpl(Clazz<?> s, Object object, String name,
+    private boolean setPropertyImpl(ClassReflection<?> s, Object object, String name,
                                     Object value) {
         if (PlatformSpecificProvider.get().isBindingToken(name)) {
             return PlatformSpecificProvider.get().setBindingValue(
                 object, name, value);
         }
 
-        Field field = s.getAllField(name);
+        FieldReflection field = s.getAllField(name);
         if (field != null) {
             field.setValue(object, value);
             Properties.notify(object, name);
@@ -183,7 +183,7 @@ class PropertyAccessImpl implements PropertyAccessor {
         return false;
     }
 
-    private PropertyTypeCache getCache(Clazz<?> clazz) {
+    private PropertyTypeCache getCache(ClassReflection<?> clazz) {
         Integer key = System.identityHashCode(clazz);
 
         PropertyTypeCache res = propertyTypeCache.get(key);

@@ -15,26 +15,26 @@
  */
 package nz.co.doltech.databind.reflect.jre;
 
-import nz.co.doltech.databind.reflect.Clazz;
-import nz.co.doltech.databind.reflect.ClassInfo;
+import nz.co.doltech.databind.reflect.ClassReflection;
+import nz.co.doltech.databind.reflect.Reflection;
 
 import java.util.HashMap;
 import java.util.Set;
 
-public class ClassInfoJre implements ClassInfo {
-    private static final ClassInfoJre instance = new ClassInfoJre();
-    HashMap<Class<?>, ClazzJre<?>> clazzCache = new HashMap<>();
+public class ReflectionJre implements Reflection {
+    private static final ReflectionJre instance = new ReflectionJre();
+    HashMap<Class<?>, ClassReflectionJre<?>> clazzCache = new HashMap<>();
 
-    private ClassInfoJre() {
+    private ReflectionJre() {
     }
 
-    public static ClassInfoJre get() {
+    public static ReflectionJre get() {
         return instance;
     }
 
     @Override
-    public <T> Clazz<T> clazz(Class<T> clazz) {
-        ClazzJre<T> result = findClazz(clazz);
+    public <T> ClassReflection<T> reflect(Class<T> clazz) {
+        ClassReflectionJre<T> result = findClass(clazz);
         if (result == null) {
             throw new RuntimeException("Cannot find class '" + clazz.getName() + "'");
         }
@@ -43,25 +43,25 @@ public class ClassInfoJre implements ClassInfo {
     }
 
     @Override
-    public <T> void registerClazz(Clazz<T> clazz) {
-        clazzCache.put(clazz.getReflectedClass(), (ClazzJre<?>) clazz);
+    public <T> void registerClass(ClassReflection<T> clazz) {
+        clazzCache.put(clazz.getReflectedClass(), (ClassReflectionJre<?>) clazz);
     }
 
     @Override
-    public Clazz<?> findClazz(String name) {
+    public ClassReflection<?> findClass(String name) {
         try {
-            return findClazz(Class.forName(name));
+            return findClass(Class.forName(name));
         } catch (ClassNotFoundException e) {
             return null;
         }
     }
 
     @Override
-    public <T> ClazzJre<T> findClazz(Class<T> clazz) {
+    public <T> ClassReflectionJre<T> findClass(Class<T> clazz) {
         @SuppressWarnings("unchecked")
-        ClazzJre<T> result = (ClazzJre<T>) clazzCache.get(clazz);
+        ClassReflectionJre<T> result = (ClassReflectionJre<T>) clazzCache.get(clazz);
         if (result == null) {
-            result = new ClazzJre<T>(clazz);
+            result = new ClassReflectionJre<T>(clazz);
             clazzCache.put(clazz, result);
         }
 

@@ -13,31 +13,8 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package nz.co.doltech.databind.reflect;
+package nz.co.doltech.databind.core.dto;
 
-import java.util.List;
-
-/**
- * Runtime type information interface about a class.
- */
-public interface Clazz<T> {
-    String getClassName();
-
-    Class<T> getReflectedClass();
-
-    Clazz<? super T> getSuperclass();
-
-    List<Field> getAllFields();
-
-    Field getAllField(String fieldName);
-
-    List<Field> getFields();
-
-    Field getField(String fieldName);
-
-    List<Field> getDeclaredFields();
-
-    Field getDeclaredField(String fieldName);
-
-    T newInstance();
+public class Employee extends Person {
+    private int listing;
 }

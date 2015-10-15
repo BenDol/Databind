@@ -1,0 +1,31 @@
+package $package
+
+import java.util.List;
+import java.util.ArrayList;
+
+import nz.co.doltech.databind.reflect.Reflections;
+import nz.co.doltech.databind.reflect.FieldReflection;
+import nz.co.doltech.databind.reflect.base.ClassReflectionBase;
+import nz.co.doltech.databind.reflect.base.FieldReflectionBase;
+
+/**
+ * Generated Reflection for {@link ${targetName}}.
+ */
+public class ${implName} extends ClassReflectionBase<${targetName}> {
+    static {
+        Reflections.registerClass(new ${implName}());
+    }
+
+    public ${implName}() {
+        super(${targetName}.class, "$targetName", ${superClass}.class);
+    }
+
+    @Override
+    protected void ensureSuperClassRegistered() {
+        Reflections.registerClass(new ${superClassImpl}());
+    }
+
+    @Override
+    public ${targetName} newInstance() {
+        return new ${targetName}();
+    }

@@ -8,7 +8,6 @@ import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.exception.VelocityException;
 
 import javax.inject.Provider;
-import javax.lang.model.element.Element;
 import javax.lang.model.element.Name;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.TypeMirror;
@@ -20,10 +19,19 @@ public class ReflectionGenerator extends AbstractVelocityGenerator<TypeMirror> {
 
     private final static Logger logger = Logger.getLogger(ReflectionGenerator.class.getName());
 
-    public static final String NAME = "_ReflectImpl";
+    public static final String NAME = "_Reflection";
 
     public interface Factory {
-        ReflectionGenerator createReflection(
+        ReflectionGenerator createReflectionGenerator(
+            @Assisted("velocityTemplate") String velocityTemplate);
+
+        FieldGenerator createFieldGenerator(
+            @Assisted("velocityTemplate") String velocityTemplate);
+
+        ReflectionEndGenerator createReflectionEndGenerator(
+            @Assisted("velocityTemplate") String velocityTemplate);
+
+        ReflectionRegistryGenerator createReflectionRegistryGenerator(
             @Assisted("velocityTemplate") String velocityTemplate);
     }
 
@@ -67,9 +75,19 @@ public class ReflectionGenerator extends AbstractVelocityGenerator<TypeMirror> {
         // Superclass name
         TypeElement superClass = (TypeElement)typeUtils.asElement(element.getSuperclass());
         if(superClass != null) {
-            velocityContext.put("superClass", superClass.getQualifiedName());
-        } else {
-            velocityContext.put("superClass", "java.lang.Object");
+            String superClassName = superClass.getQualifiedName().toString();
+            velocityContext.put("superClass", superClassName);
+
+            switch (superClassName) {
+                case "java.lang.Object":
+                    velocityContext.put("superClassImpl", "nz.co.doltech.databind.reflect.base.ObjectClassReflection");
+                    break;
+                case "com.google.gwt.core.client.JavaScriptObject":
+                    velocityContext.put("superClassImpl", "nz.co.doltech.databind.reflect.gwt.base.JavaScriptObjectClassReflection");
+                    break;
+                default:
+                    velocityContext.put("superClassImpl", superClassName + NAME);
+            }
         }
     }
 }

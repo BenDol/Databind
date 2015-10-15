@@ -1,6 +1,6 @@
 package nz.co.doltech.databind.core.properties;
 
-import nz.co.doltech.databind.reflect.Clazz;
+import nz.co.doltech.databind.reflect.ClassReflection;
 
 public interface PropertyAccessor {
     /**
@@ -21,12 +21,12 @@ public interface PropertyAccessor {
      * Has access to a given field name.
      * @return null if has no access.
      */
-    boolean hasFieldAccess(Clazz<?> clazz, String name);
+    boolean hasFieldAccess(ClassReflection<?> clazz, String name);
 
     /**
      * Get a fields {@link Class} type.
      */
-    Class<?> getFieldClassType(Clazz<?> clazz, String name);
+    Class<?> getFieldClassType(ClassReflection<?> clazz, String name);
 
     /**
      * Gets a dynamic property value on an object

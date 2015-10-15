@@ -8,12 +8,4 @@
     <super-source path="reflect/gwt/emul"/>
 
     <source path="reflect" excludes="reflect/gwt/rebind,reflect/gwt/emul"/>
-
-    <generate-with class="nz.co.doltech.databind.reflect.gwt.rebind.ClazzIncrementalGenerator">
-        <when-type-assignable class="nz.co.doltech.databind.reflect.Clazz"/>
-    </generate-with>
-
-    <generate-with class="nz.co.doltech.databind.reflect.gwt.rebind.ClazzBundleIncrementalGenerator">
-        <when-type-assignable class="nz.co.doltech.databind.reflect.gwt.ClazzBundle"/>
-    </generate-with>
 </module>

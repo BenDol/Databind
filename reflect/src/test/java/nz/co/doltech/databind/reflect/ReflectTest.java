@@ -19,12 +19,12 @@ import junit.framework.TestCase;
 
 public class ReflectTest extends TestCase {
     public void test001() {
-        Clazz<?> clz = Reflection.findClazz(A.class);
+        ClassReflection<?> clz = Reflections.findClass(A.class);
         assertNotNull(clz);
     }
 
     public void test002() {
-        Clazz<?> clz = Reflection.findClazz(A.class);
+        ClassReflection<?> clz = Reflections.findClass(A.class);
         assertEquals(clz.getAllFields().size(), 2);
     }
 }

@@ -23,16 +23,18 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.annotation.processing.SupportedAnnotationTypes;
 import javax.annotation.processing.SupportedSourceVersion;
 import javax.lang.model.SourceVersion;
-import javax.lang.model.element.Element;
 import javax.lang.model.element.Name;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.MirroredTypesException;
 import javax.lang.model.type.TypeMirror;
+import javax.lang.model.util.ElementFilter;
 import javax.lang.model.util.Types;
 import javax.tools.JavaFileObject;
 
@@ -41,6 +43,16 @@ import javax.tools.JavaFileObject;
 public class ReflectionAnnotationProcessor extends AbstractProcessor {
 
     private static final Logger logger = Logger.getLogger(ReflectionAnnotationProcessor.class.getName());
+
+    private static final List<String> ignoredClasses = new ArrayList<>();
+    static {
+        ignoredClasses.add("java.lang.Object");
+        ignoredClasses.add("com.google.gwt.core.client.JavaScriptObject");
+    };
+
+    private static boolean registryCreated;
+
+    private final List<String> classCache = new ArrayList<>();
 
     public ReflectionAnnotationProcessor() {
         super(logger, new ReflectionModule());
@@ -69,27 +81,113 @@ public class ReflectionAnnotationProcessor extends AbstractProcessor {
         }
     }
 
-    private void generate(TypeMirror type, ReflectionGenerator.Factory factory) throws Exception {
+    @Override
+    protected boolean doFinalize() {
+        if(registryCreated) {
+            // The registry has already been created.
+            // This happens when the processor is scanning
+            // multiple modules.
+            return true;
+        }
+        ReflectionGenerator.Factory factory = getInjector().getInstance(ReflectionGenerator.Factory.class);
+
         Writer writer = null;
         try {
-            Element element = getTypeUtils().asElement(type);
-            String fileName = element.getSimpleName().toString() + ReflectionGenerator.NAME;
-            Name pkgName = getElementUtils().getPackageOf(element).getQualifiedName();
+            String pkgName = "nz.co.doltech.databind.reflect";
 
-            JavaFileObject jfo = getFiler().createSourceFile(pkgName.toString() + "." + fileName);
+            JavaFileObject jfo = getFiler().createSourceFile(pkgName + ".ReflectionRegistry");
             writer = jfo.openWriter();
 
-            ReflectionGenerator generator = factory.createReflection(
-                "nz/co/doltech/databind/apt/reflect/ReflectImpl.vm");
+            ReflectionRegistryGenerator generator = factory.createReflectionRegistryGenerator(
+                "nz/co/doltech/databind/apt/reflect/ReflectionRegistry.vm");
 
-            generator.mergeTemplate(writer, type);
-        } catch (IOException ex) {
+            generator.mergeTemplate(writer, classCache);
+        } catch (Exception ex) {
             ex.printStackTrace();
         } finally {
             if(writer != null) {
-                writer.close();
+                try {
+                    writer.close();
+                } catch (IOException e) {
+                    logger.log(Level.SEVERE, "Error while closing the print writer.", e);
+                }
             }
         }
+
+        registryCreated = true;
+        return true;
+    }
+
+    private void generate(TypeMirror type, ReflectionGenerator.Factory factory) throws Exception {
+        TypeElement element = (TypeElement)getTypeUtils().asElement(type);
+
+        Name pkgName = getElementUtils().getPackageOf(element).getQualifiedName();
+        String fileName = element.getSimpleName().toString() + ReflectionGenerator.NAME;
+        String qualifiedName = pkgName + "." + fileName;
+
+        String wholeName = element.getQualifiedName().toString();
+        if(ignoredClasses.contains(wholeName)) {
+            logger.fine("Ignoring " + wholeName + ", reason: In the ignored list.");
+            return;
+        } else if(classCache.contains(qualifiedName)) {
+            logger.fine("Ignoring " + wholeName + ", reason: In the already processed list.");
+            return;
+        }
+
+        Writer writer = null;
+        try {
+            JavaFileObject jfo = getFiler().createSourceFile(pkgName.toString() + "." + fileName);
+            writer = jfo.openWriter();
+
+            ReflectionGenerator generator = factory.createReflectionGenerator(
+                "nz/co/doltech/databind/apt/reflect/Reflection.vm");
+
+            generator.mergeTemplate(writer, type);
+
+            // Generate reflection field classes
+            generateFields(type, writer, factory);
+
+            generateEnd(type, writer, factory);
+
+            // Ensure we don't process this again
+            classCache.add(qualifiedName);
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            if(writer != null) {
+                try {
+                    writer.close();
+                } catch (IOException e) {
+                    logger.log(Level.SEVERE, "Error while closing the print writer.", e);
+                }
+            }
+        }
+    }
+
+    private void generateFields(TypeMirror type, Writer writer, ReflectionGenerator.Factory factory) throws Exception {
+        TypeElement element = (TypeElement)getTypeUtils().asElement(type);
+
+        for(VariableElement field : ElementFilter.fieldsIn(element.getEnclosedElements())) {
+            FieldGenerator generator = factory.createFieldGenerator(
+                "nz/co/doltech/databind/apt/reflect/FieldReflection.vm");
+
+            generator.mergeTemplate(writer, new FieldGenerator.FieldPair(field, element));
+        }
+    }
+
+    private void generateEnd(TypeMirror type, Writer writer, ReflectionGenerator.Factory factory) throws Exception {
+        TypeElement element = (TypeElement)getTypeUtils().asElement(type);
+
+        List<String> fields = new ArrayList<>();
+        for(VariableElement field : ElementFilter.fieldsIn(element.getEnclosedElements())) {
+            fields.add(field.getSimpleName() + FieldGenerator.NAME);
+        }
+
+        ReflectionEndGenerator generator = factory.createReflectionEndGenerator(
+            "nz/co/doltech/databind/apt/reflect/ReflectionEnd.vm");
+
+        generator.mergeTemplate(writer, fields);
     }
 
     private List<? extends TypeMirror> asTypeMirror(Reflected reflected) {

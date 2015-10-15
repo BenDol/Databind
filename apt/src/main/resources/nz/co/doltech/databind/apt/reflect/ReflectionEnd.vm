@@ -1,0 +1,10 @@
+
+    @Override
+    protected List<FieldReflection> loadDeclaredFields() {
+        ArrayList<FieldReflection> fields = new ArrayList<>();
+#foreach($field in $fields)
+        fields.add(new ${field}());
+#end
+        return fields;
+    }
+}

@@ -17,21 +17,30 @@ package nz.co.doltech.databind.reflect;
 
 import java.util.Set;
 
-public interface ClassInfo {
+/**
+ * Frontal singleton entry point providing the Reflection system API
+ */
+public class Reflections {
+    private static Reflection impl = ReflectionProvider.get();
+
     /**
-     * Obtain a runtime type information on a class.<br/><br/>
+     * Obtain a runtime type information on a class.<br><br>
      * <p/>
      * Throws a RuntimeException if the type information provider is not found.
      *
      * @param clazz The class object for which type information is required
      * @return The runtime information interface
      */
-    <T> Clazz<T> clazz(Class<T> clazz);
+    public static <T> ClassReflection<T> reflect(Class<T> clazz) {
+        return impl.reflect(clazz);
+    }
 
     /**
      * Register a runtime type information provider
      */
-    <T> void registerClazz(Clazz<T> clazz);
+    public static <T> void registerClass(ClassReflection<T> clazz) {
+        impl.registerClass(clazz);
+    }
 
     /**
      * Obtain a runtime type information on a class.
@@ -39,7 +48,9 @@ public interface ClassInfo {
      * @param name Name of the class for which type information is required
      * @return The runtime information interface
      */
-    Clazz<?> findClazz(String name);
+    public static ClassReflection<?> findClass(String name) {
+        return impl.findClass(name);
+    }
 
     /**
      * Obtain a runtime type information on a class.
@@ -47,10 +58,14 @@ public interface ClassInfo {
      * @param clazz The class object for which type information is required
      * @return The runtime information interface
      */
-    <T> Clazz<T> findClazz(Class<T> clazz);
+    public static <T> ClassReflection<T> findClass(Class<T> clazz) {
+        return impl.findClass(clazz);
+    }
 
     /**
      * Retrieve the set of registered type information providers.
      */
-    Set<Class<?>> getAllRegistered();
+    public static Set<Class<?>> getAllRegistered() {
+        return impl.getAllRegistered();
+    }
 }

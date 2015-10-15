@@ -15,31 +15,31 @@
  */
 package nz.co.doltech.databind.reflect.base;
 
-import nz.co.doltech.databind.reflect.Field;
+import nz.co.doltech.databind.reflect.FieldReflection;
 
-public abstract class FieldBase implements Field {
-    private final Class<?> _class;
-    private final String _fieldName;
-    private int _modifier;
+public abstract class FieldReflectionBase implements FieldReflection {
+    private final Class<?> clazz;
+    private final String fieldName;
+    private int modifier;
 
-    protected FieldBase(Class<?> clazz, String fieldName, int modifier) {
-        _class = clazz;
-        _fieldName = fieldName;
-        _modifier = modifier;
+    protected FieldReflectionBase(Class<?> clazz, String fieldName, int modifier) {
+        this.clazz = clazz;
+        this.fieldName = fieldName;
+        this.modifier = modifier;
     }
 
     @Override
     public String getName() {
-        return _fieldName;
+        return fieldName;
     }
 
     @Override
     public Class<?> getType() {
-        return _class;
+        return clazz;
     }
 
     @Override
     public int getModifier() {
-        return _modifier;
+        return modifier;
     }
 }

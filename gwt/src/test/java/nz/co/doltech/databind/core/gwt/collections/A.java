@@ -17,7 +17,9 @@ package nz.co.doltech.databind.core.gwt.collections;
 
 import nz.co.doltech.databind.core.properties.Properties;
 import nz.co.doltech.databind.core.collections.WatchableCollection;
+import nz.co.doltech.databind.reflect.Reflected;
 
+@Reflected(classes = A.class)
 public class A {
     int value;
 

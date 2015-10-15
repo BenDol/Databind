@@ -32,15 +32,7 @@ public abstract class AbstractVelocityGenerator<T> {
 
         populateVelocityContext(velocityContext, data);
 
-        try {
-            velocityEngine.mergeTemplate(getTemplate(), "UTF-8", velocityContext, writer);
-        } finally {
-            try {
-                writer.close();
-            } catch (IOException e) {
-                logger.log(Level.SEVERE, "Error while closing the print writer.", e);
-            }
-        }
+        velocityEngine.mergeTemplate(getTemplate(), "UTF-8", velocityContext, writer);
     }
 
     protected abstract String getTemplate();

@@ -13,18 +13,18 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package nz.co.doltech.databind.reflect.gwt.internal;
+package nz.co.doltech.databind.reflect.gwt.base;
 
 import java.util.HashMap;
 import java.util.List;
 
 import com.google.gwt.core.client.JavaScriptObject;
 
-import nz.co.doltech.databind.reflect.Clazz;
-import nz.co.doltech.databind.reflect.Field;
+import nz.co.doltech.databind.reflect.ClassReflection;
+import nz.co.doltech.databind.reflect.FieldReflection;
 
-public class JavaScriptObjectClazz implements Clazz<JavaScriptObject> {
-    private static HashMap<String, Field> fields = new HashMap<>();
+public class JavaScriptObjectClassReflection implements ClassReflection<JavaScriptObject> {
+    private static HashMap<String, FieldReflection> fields = new HashMap<>();
 
     @Override
     public String getClassName() {
@@ -37,32 +37,30 @@ public class JavaScriptObjectClazz implements Clazz<JavaScriptObject> {
     }
 
     @Override
-    public List<Field> getFields() {
+    public List<FieldReflection> getFields() {
         return null;
     }
 
-    private native void setJsoProperty(JavaScriptObject jso, String property, Object value)
-    /*-{
+    private native void setJsoProperty(JavaScriptObject jso, String property, Object value) /*-{
         jso[property] = value;
     }-*/;
 
-    private native <T> T getJsoProperty(JavaScriptObject jso, String property)
-	/*-{
+    private native <T> T getJsoProperty(JavaScriptObject jso, String property) /*-{
         return jso[property] || null;
     }-*/;
 
     @Override
-    public Field getField(final String fieldName) {
-        Field res = fields.get(fieldName);
+    public FieldReflection getField(final String fieldName) {
+        FieldReflection res = fields.get(fieldName);
         if (res == null) {
-            res = new Field() {
+            res = new FieldReflection() {
                 @Override
                 public void setValue(Object object, Object value) {
                     setJsoProperty((JavaScriptObject) object, fieldName, value);
                 }
 
                 @Override
-                public <OUT> OUT getValue(Object object) {
+                public <T> T getValue(Object object) {
                     return getJsoProperty((JavaScriptObject) object, fieldName);
                 }
 
@@ -97,27 +95,27 @@ public class JavaScriptObjectClazz implements Clazz<JavaScriptObject> {
     }
 
     @Override
-    public Clazz<? super JavaScriptObject> getSuperclass() {
+    public ClassReflection<? super JavaScriptObject> getSuperclass() {
         return null;
     }
 
     @Override
-    public List<Field> getDeclaredFields() {
+    public List<FieldReflection> getDeclaredFields() {
         return null;
     }
 
     @Override
-    public Field getDeclaredField(String fieldName) {
+    public FieldReflection getDeclaredField(String fieldName) {
         return getField(fieldName);
     }
 
     @Override
-    public List<Field> getAllFields() {
+    public List<FieldReflection> getAllFields() {
         return null;
     }
 
     @Override
-    public Field getAllField(String fieldName) {
+    public FieldReflection getAllField(String fieldName) {
         return getField(fieldName);
     }
 

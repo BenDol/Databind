@@ -20,9 +20,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.logging.Logger;
 
-import nz.co.doltech.databind.reflect.Reflection;
-import nz.co.doltech.databind.reflect.Clazz;
-import nz.co.doltech.databind.reflect.Field;
+import nz.co.doltech.databind.reflect.ClassReflection;
+import nz.co.doltech.databind.reflect.Reflections;
+import nz.co.doltech.databind.reflect.FieldReflection;
 import nz.co.doltech.databind.core.properties.Properties;
 import nz.co.doltech.databind.core.propertyadapters.ObjectPropertyAdapter;
 
@@ -44,32 +44,32 @@ public class ModelMapper {
         logger.fine("Binding object of class " + getSimpleName(source.getClass())
             + " to another of class " + getSimpleName(destination.getClass()));
 
-        Clazz<?> sourceClass = Reflection.clazz(source.getClass());
-        Clazz<?> destinationClass = Reflection.clazz(destination.getClass());
+        ClassReflection<?> sourceClass = Reflections.reflect(source.getClass());
+        ClassReflection<?> destinationClass = Reflections.reflect(destination.getClass());
 
         // registers all possible bindings
         HashSet<String> boundNames = new HashSet<>();
 
         // process the fields
-        for (Field field : sourceClass.getAllFields()) {
+        for (FieldReflection field : sourceClass.getAllFields()) {
             boundNames.add(field.getName());
         }
 
-        for (Field field : destinationClass.getAllFields()) {
+        for (FieldReflection field : destinationClass.getAllFields()) {
             boundNames.add(field.getName());
         }
 
         for (String name : boundNames) {
-            boolean srcRead = Properties.canAccessField(Reflection.clazz(source.getClass()), name);
-            boolean destinationWrite = Properties.canAccessField(Reflection.clazz(destination.getClass()), name);
+            boolean srcRead = Properties.canAccessField(Reflections.reflect(source.getClass()), name);
+            boolean destinationWrite = Properties.canAccessField(Reflections.reflect(destination.getClass()), name);
 
             // ensure both have necessary fields
             if (!srcRead || !destinationWrite) {
                 continue; // bypass
             }
 
-            boolean srcWrite = Properties.canAccessField(Reflection.clazz(source.getClass()), name);
-            boolean destinationRead = Properties.canAccessField(Reflection.clazz(destination.getClass()), name);
+            boolean srcWrite = Properties.canAccessField(Reflections.reflect(source.getClass()), name);
+            boolean destinationRead = Properties.canAccessField(Reflections.reflect(destination.getClass()), name);
 
             // adjust binding mode according to capabilities
             Mode bindingMode = Mode.OneWay;
@@ -131,7 +131,7 @@ public class ModelMapper {
 
     static DataAdapterInfo createDataAdapter(Object context, String property, Class<?> srcPptyType) {
         DataAdapterInfo info = new DataAdapterInfo();
-        info.dataType = Properties.getPropertyClassType(Reflection.clazz(context.getClass()), property);
+        info.dataType = Properties.getPropertyClassType(Reflections.reflect(context.getClass()), property);
         info.debugString = getSimpleName(context.getClass()) + ", ";
 
         // test to see if the asked property is in fact a HasValue widget

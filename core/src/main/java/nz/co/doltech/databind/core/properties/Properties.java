@@ -15,7 +15,7 @@
  */
 package nz.co.doltech.databind.core.properties;
 
-import nz.co.doltech.databind.reflect.Clazz;
+import nz.co.doltech.databind.reflect.ClassReflection;
 
 /**
  * Utility class supporting the concept of Property.
@@ -33,7 +33,7 @@ public class Properties {
     /**
      * Returns the class of the property
      */
-    public static Class<?> getPropertyClassType(Clazz<?> clazz, String name) {
+    public static Class<?> getPropertyClassType(ClassReflection<?> clazz, String name) {
         return propertyAccess.getFieldClassType(clazz, name);
     }
 
@@ -101,7 +101,7 @@ public class Properties {
     /**
      * Whether a getter or a field is available with that name.
      */
-    public static boolean canAccessField(Clazz<?> clazz, String name) {
+    public static boolean canAccessField(ClassReflection<?> clazz, String name) {
         return propertyAccess.hasFieldAccess(clazz, name);
     }
 
@@ -111,7 +111,7 @@ public class Properties {
      * If a virtual property is used, it returns null or the class of the current
      * property's value.
      */
-    public static Class<?> getFieldClassType(Clazz<?> clazz, String name) {
+    public static Class<?> getFieldClassType(ClassReflection<?> clazz, String name) {
         return propertyAccess.getFieldClassType(clazz, name);
     }
 

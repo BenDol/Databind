@@ -18,41 +18,48 @@ package nz.co.doltech.databind.reflect.base;
 import java.util.ArrayList;
 import java.util.List;
 
-import nz.co.doltech.databind.reflect.Reflection;
-import nz.co.doltech.databind.reflect.Clazz;
-import nz.co.doltech.databind.reflect.Field;
+import nz.co.doltech.databind.reflect.ClassReflection;
+import nz.co.doltech.databind.reflect.Reflections;
+import nz.co.doltech.databind.reflect.FieldReflection;
 
-public abstract class ClazzBase<T> implements Clazz<T> {
+public abstract class ClassReflectionBase<T> implements ClassReflection<T> {
+    private String className;
     private Class<? super T> superClass;
     private Class<T> reflectedClass;
-    private String className;
-    private List<Field> allFields;
-    private List<Field> declaredFields;
-    private List<Field> fields;
 
-    @SuppressWarnings("unused")
-    private ClazzBase() {
+    private List<FieldReflection> allFields;
+    private List<FieldReflection> declaredFields;
+    private List<FieldReflection> fields;
+
+    private ClassReflectionBase() {
     }
 
     @SuppressWarnings("unchecked")
-    protected ClazzBase(Class<?> reflectedClass, String className, Class<? super T> superClass) {
+    protected ClassReflectionBase(Class<?> reflectedClass, String className, Class<? super T> superClass) {
         this.reflectedClass = (Class<T>) reflectedClass;
         this.className = className;
         this.superClass = superClass;
     }
 
-    protected abstract List<Field> _getDeclaredFields();
+    /**
+     * Load the registered declared fields.
+     */
+    protected abstract List<FieldReflection> loadDeclaredFields();
 
+    /**
+     * Ensure the super class is registered.
+     */
     protected abstract void ensureSuperClassRegistered();
 
     @Override
-    public Clazz<? super T> getSuperclass() {
-        if (superClass == null)
+    public ClassReflection<? super T> getSuperclass() {
+        if (superClass == null) {
             return null;
+        }
 
         ensureSuperClassRegistered();
 
-        return Reflection.clazz(superClass);
+        return Reflections.reflect(superClass);
     }
 
     @Override
@@ -68,12 +75,12 @@ public abstract class ClazzBase<T> implements Clazz<T> {
     }
 
     @Override
-    public List<Field> getAllFields() {
+    public List<FieldReflection> getAllFields() {
         if (allFields == null) {
-            allFields = _getDeclaredFields();
+            allFields = loadDeclaredFields();
 
             // all public declared fields of superclass
-            Clazz<? super T> superClass = getSuperclass();
+            ClassReflection<? super T> superClass = getSuperclass();
             if (superClass != null) {
                 allFields.addAll(superClass.getAllFields());
             }
@@ -83,14 +90,16 @@ public abstract class ClazzBase<T> implements Clazz<T> {
     }
 
     @Override
-    public Field getAllField(String name) {
+    public FieldReflection getAllField(String name) {
         // first, search in declared fields
-        for (Field field : getDeclaredFields())
-            if (field.getName().equals(name))
+        for (FieldReflection field : getDeclaredFields()) {
+            if (field.getName().equals(name)) {
                 return field;
+            }
+        }
 
         // then try superclass
-        Clazz<? super T> superClass = getSuperclass();
+        ClassReflection<? super T> superClass = getSuperclass();
         if (superClass != null) {
             return superClass.getAllField(name);
         }
@@ -99,17 +108,17 @@ public abstract class ClazzBase<T> implements Clazz<T> {
     }
 
     @Override
-    public List<Field> getDeclaredFields() {
+    public List<FieldReflection> getDeclaredFields() {
         if (declaredFields == null) {
-            declaredFields = _getDeclaredFields();
+            declaredFields = loadDeclaredFields();
         }
 
         return declaredFields;
     }
 
     @Override
-    public Field getDeclaredField(String name) {
-        for (Field field : getDeclaredFields()) {
+    public FieldReflection getDeclaredField(String name) {
+        for (FieldReflection field : getDeclaredFields()) {
             if (field.getName().equals(name)) {
                 return field;
             }
@@ -118,29 +127,28 @@ public abstract class ClazzBase<T> implements Clazz<T> {
     }
 
     @Override
-    public List<Field> getFields() {
+    public List<FieldReflection> getFields() {
         if (fields == null) {
             // all public declared fields
-            fields = new ArrayList<Field>();
-            for (Field field : getDeclaredFields()) {
+            fields = new ArrayList<FieldReflection>();
+            for (FieldReflection field : getDeclaredFields()) {
                 if ((field.getModifier() & /*Modifier.PUBLIC*/1) == /*Modifier.PUBLIC*/1) {
                     fields.add(field);
                 }
             }
 
             // all public declared fields of superclass
-            Clazz<? super T> superClass = getSuperclass();
+            ClassReflection<? super T> superClass = getSuperclass();
             if (superClass != null) {
                 fields.addAll(superClass.getDeclaredFields());
             }
         }
-
         return fields;
     }
 
     @Override
-    public Field getField(String fieldName) {
-        for (Field field : getFields()) {
+    public FieldReflection getField(String fieldName) {
+        for (FieldReflection field : getFields()) {
             if (field.getName().equals(fieldName)) {
                 return field;
             }

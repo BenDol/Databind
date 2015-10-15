@@ -15,33 +15,33 @@
  */
 package nz.co.doltech.databind.reflect.gwt;
 
+import nz.co.doltech.databind.reflect.ClassReflection;
+import nz.co.doltech.databind.reflect.Reflection;
+import nz.co.doltech.databind.reflect.base.ObjectClassReflection;
+
 import java.util.HashMap;
 import java.util.Set;
 
-import nz.co.doltech.databind.reflect.Clazz;
-import nz.co.doltech.databind.reflect.ClassInfo;
-import nz.co.doltech.databind.reflect.base.ObjectClazz;
+public class ReflectionGwt implements Reflection {
+    private HashMap<Class<?>, ClassReflection<?>> clazzMap;
 
-public class ClassInfoGwt implements ClassInfo {
-    private HashMap<Class<?>, Clazz<?>> clazzMap;
-
-    public ClassInfoGwt() {
+    public ReflectionGwt() {
         clazzMap = new HashMap<>();
-        clazzMap.put(java.lang.Object.class, new ObjectClazz());
+        clazzMap.put(java.lang.Object.class, new ObjectClassReflection());
     }
 
     /**
-     * Obtain a runtime type information on a class.<br/><br/>
+     * Obtain a runtime type information on a class.<br/>
      * Throws a RuntimeException if the type information provider is not found.
      *
      * @param clazz The class object for which type information is required
      * @return The runtime information interface
      */
     @SuppressWarnings("unchecked")
-    public <T> Clazz<T> clazz(Class<T> clazz) {
-        Clazz<T> res = (Clazz<T>) this.clazzMap.get(clazz);
+    public <T> ClassReflection<T> reflect(Class<T> clazz) {
+        ClassReflection<T> res = (ClassReflection<T>) this.clazzMap.get(clazz);
         if (res == null) {
-            throw new IllegalArgumentException("Class not supported by ClassInfo : " + clazz.getName());
+            throw new IllegalArgumentException("Class not supported by Reflection : " + clazz.getName());
         }
 
         return res;
@@ -50,7 +50,7 @@ public class ClassInfoGwt implements ClassInfo {
     /**
      * Register a runtime type information provider
      */
-    public <T> void registerClazz(Clazz<T> clazz) {
+    public <T> void registerClass(ClassReflection<T> clazz) {
         if (this.clazzMap.containsKey(clazz.getReflectedClass())) {
             return;
         }
@@ -63,8 +63,8 @@ public class ClassInfoGwt implements ClassInfo {
      * @param name Name of the class for which type information is required
      * @return The runtime information interface
      */
-    public Clazz<?> findClazz(String name) {
-        for (Clazz<?> c : clazzMap.values()) {
+    public ClassReflection<?> findClass(String name) {
+        for (ClassReflection<?> c : clazzMap.values()) {
             if (c.getClassName().equals(name)) {
                 return c;
             }
@@ -79,10 +79,10 @@ public class ClassInfoGwt implements ClassInfo {
      * @return The runtime information interface
      */
     @SuppressWarnings("unchecked")
-    public <T> Clazz<T> findClazz(Class<T> clazz) {
-        for (Clazz<?> c : this.clazzMap.values()) {
+    public <T> ClassReflection<T> findClass(Class<T> clazz) {
+        for (ClassReflection<?> c : this.clazzMap.values()) {
             if (c.getReflectedClass() == clazz) {
-                return (Clazz<T>) c;
+                return (ClassReflection<T>) c;
             }
         }
         return null;

@@ -15,10 +15,19 @@
  */
 package nz.co.doltech.databind.reflect;
 
-import nz.co.doltech.databind.reflect.jre.ClassInfoJre;
+/**
+ * Represents a Java field.
+ */
+public interface FieldReflection {
+    String getName();
 
-public class ClassInfoProvider {
-    public static ClassInfo get() {
-        return ClassInfoJre.get();
-    }
+    Class<?> getType();
+
+    void setValue(Object object, Object value);
+
+    <T> T getValue(Object object);
+
+    void copyValueTo(Object source, Object destination);
+
+    int getModifier();
 }

@@ -3,7 +3,7 @@
         "http://google-web-toolkit.googlecode.com/svn/tags/1.7.1/distro-source/core/src/gwt-module.dtd">
 <module>
     <inherits name='com.google.gwt.user.User'/>
-    <inherits name='nz.co.doltech.databind.ClassInfo'/>
+    <inherits name='nz.co.doltech.databind.Reflect'/>
 
     <source path="gwt"/>
 </module>

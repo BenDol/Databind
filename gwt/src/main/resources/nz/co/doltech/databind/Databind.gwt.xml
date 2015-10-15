@@ -4,7 +4,7 @@
 <module>
     <inherits name='com.google.gwt.user.User'/>
     <inherits name='nz.co.doltech.databind.Util'/>
-    <inherits name='nz.co.doltech.databind.ClassInfo'/>
+    <inherits name='nz.co.doltech.databind.Reflect'/>
 
     <super-source path="core/gwt/emul"/>
 

@@ -17,10 +17,10 @@ package nz.co.doltech.databind.reflect.gwt;
 
 import com.google.gwt.junit.client.GWTTestCase;
 
-import nz.co.doltech.databind.reflect.Reflection;
-import nz.co.doltech.databind.reflect.Clazz;
+import nz.co.doltech.databind.reflect.ClassReflection;
+import nz.co.doltech.databind.reflect.Reflections;
 
-public class ClassInfoGwtTest extends GWTTestCase {
+public class ReflectionGwtTest extends GWTTestCase {
     @Override
     public String getModuleName() {
         return "nz.co.doltech.databind.reflect.ReflectionTest";
@@ -33,12 +33,12 @@ public class ClassInfoGwtTest extends GWTTestCase {
     }
 
     public void testRegisteredClazz() {
-        Clazz<?> clz = Reflection.findClazz(A.class);
+        ClassReflection<?> clz = Reflections.findClass(A.class);
         assertNotNull(clz);
     }
 
     public void testFields() {
-        Clazz<?> clz = Reflection.findClazz(A.class);
+        ClassReflection<?> clz = Reflections.findClass(A.class);
         assertEquals(clz.getAllFields().size(), 2);
     }
 }
