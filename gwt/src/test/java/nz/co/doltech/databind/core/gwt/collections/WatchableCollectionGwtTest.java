@@ -17,7 +17,6 @@ package nz.co.doltech.databind.core.gwt.collections;
 
 import java.util.List;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.junit.client.GWTTestCase;
 
 import junit.framework.Assert;
@@ -32,13 +31,6 @@ public class WatchableCollectionGwtTest extends GWTTestCase {
     @Override
     public String getModuleName() {
         return "nz.co.doltech.databind.core.DatabindTest";
-    }
-
-    @Override
-    protected void gwtSetUp() throws Exception {
-        super.gwtSetUp();
-
-        ReflectionRegistry.register();
     }
 
     public void testA() {
@@ -65,6 +57,8 @@ public class WatchableCollectionGwtTest extends GWTTestCase {
     }
 
     public void testB() {
+        ReflectionRegistry.register();
+
         A a = new A();
         A b = new A();
 

@@ -157,8 +157,7 @@ class PropertyAccessImpl implements PropertyAccessor {
         return null;
     }
 
-    private boolean setPropertyImpl(ClassReflection<?> s, Object object, String name,
-                                    Object value) {
+    private boolean setPropertyImpl(ClassReflection<?> s, Object object, String name, Object value) {
         if (PlatformSpecificProvider.get().isBindingToken(name)) {
             return PlatformSpecificProvider.get().setBindingValue(
                 object, name, value);

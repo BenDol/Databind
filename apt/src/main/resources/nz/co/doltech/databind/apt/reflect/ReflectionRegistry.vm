@@ -1,11 +1,8 @@
 package nz.co.doltech.databind.reflect;
 
-import nz.co.doltech.databind.reflect.Reflections;
-import nz.co.doltech.databind.reflect.Reflected;
-
 /**
  * Used to register all classes in {@link Reflected},
- * call {@link \#register()} before binding fields.
+ * call {@link #register()} before binding fields.
  */
 public class ReflectionRegistry {
 
