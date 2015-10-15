@@ -8,9 +8,12 @@ import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.exception.VelocityException;
 
 import javax.inject.Provider;
+import javax.lang.model.element.ExecutableElement;
+import javax.lang.model.element.Modifier;
 import javax.lang.model.element.Name;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.TypeMirror;
+import javax.lang.model.util.ElementFilter;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
 import java.util.logging.Logger;
@@ -89,5 +92,29 @@ public class ReflectionGenerator extends AbstractVelocityGenerator<TypeMirror> {
                     velocityContext.put("superClassImpl", superClassName + NAME);
             }
         }
+
+        // Is abstract
+        velocityContext.put("abstract", hasModifier(element, Modifier.ABSTRACT));
+
+        // Default constructor
+        velocityContext.put("defaultCtor", hasDefaultCtor(element));
+    }
+
+    private boolean hasModifier(TypeElement element, Modifier modifier) {
+        for(Modifier mod : element.getModifiers()) {
+            if(mod.equals(modifier)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean hasDefaultCtor(TypeElement element) {
+        for(ExecutableElement ctor : ElementFilter.constructorsIn(element.getEnclosedElements())) {
+            if (ctor.getParameters().isEmpty()) {
+                return true;
+            }
+        }
+        return false;
     }
 }

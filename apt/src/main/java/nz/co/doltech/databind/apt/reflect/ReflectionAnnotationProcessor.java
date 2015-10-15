@@ -61,19 +61,10 @@ public class ReflectionAnnotationProcessor extends AbstractProcessor {
     @Override
     protected void doProcess(ProcessorInfo procInfo) throws IOException {
         ReflectionGenerator.Factory factory = getInjector().getInstance(ReflectionGenerator.Factory.class);
-        Types typeUtils = getTypeUtils();
 
         try {
             Reflected annotation = (Reflected)procInfo.getAnnotation();
             for(TypeMirror type : asTypeMirror(annotation)) {
-                TypeElement element = (TypeElement)typeUtils.asElement(type);
-
-                // Generate the super class
-                TypeMirror superClass = element.getSuperclass();
-                if(element.getSuperclass() != null) {
-                    generate(superClass, factory);
-                }
-
                 generate(type, factory);
             }
         } catch (Exception ex) {
@@ -119,7 +110,19 @@ public class ReflectionAnnotationProcessor extends AbstractProcessor {
     }
 
     private void generate(TypeMirror type, ReflectionGenerator.Factory factory) throws Exception {
-        TypeElement element = (TypeElement)getTypeUtils().asElement(type);
+        Types typeUtils = getTypeUtils();
+
+        TypeElement element = (TypeElement)typeUtils.asElement(type);
+        if(element == null) {
+            return;
+        }
+
+        // Generate the super class
+        // Always generate the super class first
+        TypeMirror superClass = element.getSuperclass();
+        if(superClass != null) {
+            generate(superClass, factory);
+        }
 
         Name pkgName = getElementUtils().getPackageOf(element).getQualifiedName();
         String fileName = element.getSimpleName().toString() + ReflectionGenerator.NAME;

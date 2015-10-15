@@ -23,6 +23,7 @@ import junit.framework.Assert;
 import nz.co.doltech.databind.core.gwt.Binder;
 import nz.co.doltech.databind.core.collections.WatchableCollection;
 import nz.co.doltech.databind.reflect.ReflectionRegistry;
+import nz.co.doltech.databind.reflect.Reflections;
 import nz.co.doltech.databind.util.Action;
 import nz.co.doltech.databind.core.PlatformSpecificProvider;
 import nz.co.doltech.databind.core.collections.Change;
@@ -31,6 +32,11 @@ public class WatchableCollectionGwtTest extends GWTTestCase {
     @Override
     public String getModuleName() {
         return "nz.co.doltech.databind.core.DatabindTest";
+    }
+
+    @Override
+    protected void gwtSetUp() throws Exception {
+        ReflectionRegistry.register();
     }
 
     public void testA() {
@@ -57,8 +63,6 @@ public class WatchableCollectionGwtTest extends GWTTestCase {
     }
 
     public void testB() {
-        ReflectionRegistry.register();
-
         A a = new A();
         A b = new A();
 

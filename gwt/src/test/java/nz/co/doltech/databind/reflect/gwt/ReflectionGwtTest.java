@@ -18,8 +18,11 @@ package nz.co.doltech.databind.reflect.gwt;
 import com.google.gwt.junit.client.GWTTestCase;
 
 import nz.co.doltech.databind.reflect.ClassReflection;
+import nz.co.doltech.databind.reflect.Reflected;
+import nz.co.doltech.databind.reflect.ReflectionRegistry;
 import nz.co.doltech.databind.reflect.Reflections;
 
+@Reflected(classes = A.class)
 public class ReflectionGwtTest extends GWTTestCase {
     @Override
     public String getModuleName() {
@@ -28,8 +31,7 @@ public class ReflectionGwtTest extends GWTTestCase {
 
     @Override
     protected void gwtSetUp() throws Exception {
-        super.gwtSetUp();
-
+        ReflectionRegistry.register();
     }
 
     public void testRegisteredClazz() {

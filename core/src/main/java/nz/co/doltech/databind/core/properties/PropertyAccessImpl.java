@@ -146,8 +146,9 @@ class PropertyAccessImpl implements PropertyAccessor {
 
         // try direct field access
         FieldReflection field = s.getAllField(name);
-        if (field != null)
+        if (field != null) {
             return field.getValue(object);
+        }
 
         // Maybe a dynamic property will be set later on
         logger.warning("DataBinding: Warning: assuming that the object would " +
@@ -170,12 +171,13 @@ class PropertyAccessImpl implements PropertyAccessor {
             return true;
         }
 
-        if (!hasObjectDynamicProperty(object, name))
+        if (!hasObjectDynamicProperty(object, name)) {
             logger.warning("'"
                 + name + "' write dynamic property on object "
                 + object.getClass().getName() + " with value " + value + " "
                 + "WARNING : That means there is no field for that class, "
                 + "please ensure this is intentional.");
+        }
 
         setObjectDynamicProperty(object, name, value);
 

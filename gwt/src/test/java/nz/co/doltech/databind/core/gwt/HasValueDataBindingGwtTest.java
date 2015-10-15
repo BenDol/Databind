@@ -17,6 +17,8 @@ package nz.co.doltech.databind.core.gwt;
 
 import com.google.gwt.junit.client.GWTTestCase;
 import com.google.gwt.user.client.ui.TextBox;
+import nz.co.doltech.databind.reflect.Reflected;
+import nz.co.doltech.databind.reflect.ReflectionRegistry;
 
 /**
  * In addition to the normal binding adapters, the GWT version provides
@@ -27,6 +29,10 @@ import com.google.gwt.user.client.ui.TextBox;
  * @author Arnaud Tournier
  * @author Ben Dol
  */
+@Reflected(classes = {
+    TextBox.class, DTO.class
+
+})
 public class HasValueDataBindingGwtTest extends GWTTestCase {
     @Override
     public String getModuleName() {
@@ -35,7 +41,7 @@ public class HasValueDataBindingGwtTest extends GWTTestCase {
 
     @Override
     protected void gwtSetUp() throws Exception {
-        super.gwtSetUp();
+        ReflectionRegistry.register();
     }
 
     /**

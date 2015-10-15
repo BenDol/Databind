@@ -12,9 +12,6 @@ import nz.co.doltech.databind.reflect.base.FieldReflectionBase;
  * Generated Reflection for {@link ${targetName}}.
  */
 public class ${implName} extends ClassReflectionBase<${targetName}> {
-    static {
-        Reflections.registerClass(new ${implName}());
-    }
 
     public ${implName}() {
         super(${targetName}.class, "$targetName", ${superClass}.class);
@@ -27,5 +24,11 @@ public class ${implName} extends ClassReflectionBase<${targetName}> {
 
     @Override
     public ${targetName} newInstance() {
+#if(!$defaultCtor)
+        throw new java.lang.IllegalStateException("Targeted class does not have a zero argument constructor, cannot create instance");
+#elseif($abstract)
+        throw new java.lang.IllegalStateException("Targeted class is abstract, cannot create instance");
+#else
         return new ${targetName}();
+#end
     }

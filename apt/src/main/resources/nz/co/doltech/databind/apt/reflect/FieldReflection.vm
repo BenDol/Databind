@@ -8,7 +8,7 @@
 
         @Override
         public void setValue(Object object, Object value) {
-            setNativeValue(object, (${castClass}) value);
+            setNativeValue(object, (${targetName}) value);
         }
 
         @Override
@@ -21,7 +21,7 @@
             dest.@${parentClass}::${fieldName} = source.@${parentClass}::${fieldName};
         }-*/;
 
-        private native final void setNativeValue(Object object, ${castClass} value) /*-{
+        private native final void setNativeValue(Object object, ${targetName} value) /*-{
             object.@${parentClass}::${fieldName} = value;
         }-*/;
 
