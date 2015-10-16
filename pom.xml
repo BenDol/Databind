@@ -45,6 +45,8 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.generated-sources>${project.build.directory}/generated-sources/apt</project.generated-sources>
+
         <mavenVersion>3.0</mavenVersion>
         <gwt.version>[2.7.0,)</gwt.version>
         <velocity.version>1.7</velocity.version>
@@ -59,6 +61,7 @@
 
         <maven-plugin-api.version>2.0</maven-plugin-api.version>
         <maven-plugin-annotations.version>3.2</maven-plugin-annotations.version>
+        <maven-processor-plugin.version>2.2.4</maven-processor-plugin.version>
         <maven-source-plugin.version>2.3</maven-source-plugin.version>
         <maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>
         <maven-surefire-plugin.version>2.12.4</maven-surefire-plugin.version>
@@ -216,6 +219,26 @@
         </dependencies>
     </dependencyManagement>
     <build>
+        <plugins>
+            <!-- Run annotation processors on src/main/java sources -->
+            <plugin>
+                <groupId>org.bsc.maven</groupId>
+                <artifactId>maven-processor-plugin</artifactId>
+                <version>${maven-processor-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>process</id>
+                        <phase>process-classes</phase>
+                        <goals>
+                            <goal>process</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.generated-sources}</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
         <pluginManagement>
             <plugins>
                 <plugin>

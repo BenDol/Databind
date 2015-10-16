@@ -23,7 +23,6 @@ import junit.framework.Assert;
 import nz.co.doltech.databind.core.gwt.Binder;
 import nz.co.doltech.databind.core.collections.WatchableCollection;
 import nz.co.doltech.databind.reflect.ReflectionRegistry;
-import nz.co.doltech.databind.reflect.Reflections;
 import nz.co.doltech.databind.util.Action;
 import nz.co.doltech.databind.core.PlatformSpecificProvider;
 import nz.co.doltech.databind.core.collections.Change;
