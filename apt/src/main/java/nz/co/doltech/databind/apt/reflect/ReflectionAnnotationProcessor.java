@@ -16,7 +16,9 @@
 package nz.co.doltech.databind.apt.reflect;
 
 import nz.co.doltech.databind.apt.AbstractProcessor;
+import nz.co.doltech.databind.apt.ElementUtils;
 import nz.co.doltech.databind.apt.ProcessorInfo;
+import nz.co.doltech.databind.reflect.IgnoreInfo;
 import nz.co.doltech.databind.reflect.Reflected;
 
 import java.io.IOException;
@@ -29,6 +31,7 @@ import java.util.logging.Logger;
 import javax.annotation.processing.SupportedAnnotationTypes;
 import javax.annotation.processing.SupportedSourceVersion;
 import javax.lang.model.SourceVersion;
+import javax.lang.model.element.Modifier;
 import javax.lang.model.element.Name;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
@@ -63,8 +66,19 @@ public class ReflectionAnnotationProcessor extends AbstractProcessor {
         ReflectionGenerator.Factory factory = getInjector().getInstance(ReflectionGenerator.Factory.class);
 
         try {
+            // Class will have the Reflected annotation
             Reflected annotation = (Reflected)procInfo.getAnnotation();
-            for(TypeMirror type : asTypeMirror(annotation)) {
+
+            for(TypeMirror ignore : getIgnoreClasses(annotation)) {
+                TypeElement element = (TypeElement)getTypeUtils().asElement(ignore);
+
+                String name = element.getQualifiedName().toString();
+                if(!ignoredClasses.contains(name)) {
+                    ignoredClasses.add(name);
+                }
+            }
+
+            for(TypeMirror type : getReflectClasses(annotation)) {
                 generate(type, factory);
             }
         } catch (Exception ex) {
@@ -86,7 +100,7 @@ public class ReflectionAnnotationProcessor extends AbstractProcessor {
         try {
             String pkgName = "nz.co.doltech.databind.reflect";
 
-            JavaFileObject jfo = getFiler().createSourceFile(pkgName + ".ReflectionRegistry");
+            JavaFileObject jfo = getFiler().createSourceFile("reflect." + pkgName + ".ReflectionRegistry");
             writer = jfo.openWriter();
 
             ReflectionRegistryGenerator generator = factory.createReflectionRegistryGenerator(
@@ -117,13 +131,10 @@ public class ReflectionAnnotationProcessor extends AbstractProcessor {
             return;
         }
 
-        // Generate the super class
-        // Always generate the super class first
-        TypeMirror superClass = element.getSuperclass();
-        if(superClass != null) {
-            generate(superClass, factory);
-        }
-
+        // Check ignored classes and class cache,
+        // check this before processing the superclass
+        // otherwise we will load an ignored types parent.
+        //
         Name pkgName = getElementUtils().getPackageOf(element).getQualifiedName();
         String fileName = element.getSimpleName().toString() + ReflectionGenerator.NAME;
         String qualifiedName = pkgName + "." + fileName;
@@ -137,9 +148,16 @@ public class ReflectionAnnotationProcessor extends AbstractProcessor {
             return;
         }
 
+        // Generate the super class
+        // Always generate the super class first
+        TypeMirror superClass = element.getSuperclass();
+        if(superClass != null) {
+            generate(superClass, factory);
+        }
+
         Writer writer = null;
         try {
-            JavaFileObject jfo = getFiler().createSourceFile(pkgName.toString() + "." + fileName);
+            JavaFileObject jfo = getFiler().createSourceFile("reflect." + pkgName + "." + fileName);
             writer = jfo.openWriter();
 
             ReflectionGenerator generator = factory.createReflectionGenerator(
@@ -148,9 +166,9 @@ public class ReflectionAnnotationProcessor extends AbstractProcessor {
             generator.mergeTemplate(writer, type);
 
             // Generate reflection field classes
-            generateFields(type, writer, factory);
+            List<String> fieldsAdded = generateFields(type, writer, factory);
 
-            generateEnd(type, writer, factory);
+            generateEnd(fieldsAdded, writer, factory);
 
             // Ensure we don't process this again
             classCache.add(qualifiedName);
@@ -168,32 +186,37 @@ public class ReflectionAnnotationProcessor extends AbstractProcessor {
         }
     }
 
-    private void generateFields(TypeMirror type, Writer writer, ReflectionGenerator.Factory factory) throws Exception {
+    private List<String> generateFields(TypeMirror type, Writer writer, ReflectionGenerator.Factory factory) throws Exception {
         TypeElement element = (TypeElement)getTypeUtils().asElement(type);
 
+        List<String> fieldsAdded = new ArrayList<>();
         for(VariableElement field : ElementFilter.fieldsIn(element.getEnclosedElements())) {
-            FieldGenerator generator = factory.createFieldGenerator(
-                "nz/co/doltech/databind/apt/reflect/FieldReflection.vm");
+            if(field.getAnnotation(IgnoreInfo.class) != null) {
+                // We can ignore this field since it has
+                // the IgnoreInfo annotation marker.
+                continue;
+            }
 
-            generator.mergeTemplate(writer, new FieldGenerator.FieldPair(field, element));
+            if(!ElementUtils.hasAtleastOneModifier(field, Modifier.FINAL, Modifier.STATIC, Modifier.TRANSIENT)) {
+                FieldGenerator generator = factory.createFieldGenerator(
+                    "nz/co/doltech/databind/apt/reflect/FieldReflection.vm");
+
+                generator.mergeTemplate(writer, new FieldGenerator.FieldPair(field, element));
+
+                fieldsAdded.add(field.getSimpleName().toString() + FieldGenerator.NAME);
+            }
         }
+        return fieldsAdded;
     }
 
-    private void generateEnd(TypeMirror type, Writer writer, ReflectionGenerator.Factory factory) throws Exception {
-        TypeElement element = (TypeElement)getTypeUtils().asElement(type);
-
-        List<String> fields = new ArrayList<>();
-        for(VariableElement field : ElementFilter.fieldsIn(element.getEnclosedElements())) {
-            fields.add(field.getSimpleName() + FieldGenerator.NAME);
-        }
-
+    private void generateEnd(List<String> fieldsAdded, Writer writer, ReflectionGenerator.Factory factory) throws Exception {
         ReflectionEndGenerator generator = factory.createReflectionEndGenerator(
             "nz/co/doltech/databind/apt/reflect/ReflectionEnd.vm");
 
-        generator.mergeTemplate(writer, fields);
+        generator.mergeTemplate(writer, fieldsAdded);
     }
 
-    private List<? extends TypeMirror> asTypeMirror(Reflected reflected) {
+    private List<? extends TypeMirror> getReflectClasses(Reflected reflected) {
         try {
             reflected.classes();
         }
@@ -201,5 +224,19 @@ public class ReflectionAnnotationProcessor extends AbstractProcessor {
             return mte.getTypeMirrors();
         }
         return new ArrayList<>();
+    }
+
+    private List<? extends TypeMirror> getIgnoreClasses(Reflected reflected) {
+        try {
+            reflected.ignored();
+        }
+        catch(MirroredTypesException mte) {
+            return mte.getTypeMirrors();
+        }
+        return new ArrayList<>();
+    }
+
+    public static List<String> getIgnoredClasses() {
+        return ignoredClasses;
     }
 }

@@ -9,12 +9,18 @@ import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.exception.VelocityException;
 
 import javax.inject.Provider;
+import javax.lang.model.element.Element;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.Name;
+import javax.lang.model.element.QualifiedNameable;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.element.TypeParameterElement;
 import javax.lang.model.element.VariableElement;
+import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.TypeMirror;
+import javax.lang.model.type.TypeVariable;
 import javax.lang.model.util.Types;
+import java.util.List;
 import java.util.logging.Logger;
 
 public class FieldGenerator extends AbstractVelocityGenerator<FieldGenerator.FieldPair> {
@@ -69,6 +75,17 @@ public class FieldGenerator extends AbstractVelocityGenerator<FieldGenerator.Fie
         if(targetName.contains("<")) {
             targetName = targetName.substring(0, targetName.indexOf("<"));
         }
+
+        List<? extends TypeParameterElement> args = parent.getTypeParameters();
+        if(!args.isEmpty()) {
+            TypeParameterElement arg = args.get(0);
+            if(arg.toString().equals(targetName)) {
+                List<? extends TypeMirror> bounds = arg.getBounds();
+                if(!bounds.isEmpty()) {
+                    targetName = bounds.get(0).toString();
+                }
+            }
+        }
         velocityContext.put("targetName", targetName);
 
         // Modifier
@@ -80,7 +97,7 @@ public class FieldGenerator extends AbstractVelocityGenerator<FieldGenerator.Fie
             TypeElement boxed = typeUtils.boxedClass(typeUtils.getPrimitiveType(target.getKind()));
             velocityContext.put("castClass", boxed.getQualifiedName());
         } else {
-            velocityContext.put("castClass", target);
+            velocityContext.put("castClass", targetName);
         }
 
         // Parent class name

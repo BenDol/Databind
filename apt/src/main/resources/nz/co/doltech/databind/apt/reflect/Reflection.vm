@@ -14,12 +14,14 @@ import nz.co.doltech.databind.reflect.base.FieldReflectionBase;
 public class ${implName} extends ClassReflectionBase<${targetName}> {
 
     public ${implName}() {
-        super(${targetName}.class, "$targetName", ${superClass}.class);
+        super(${targetName}.class, "$targetName", ${superClass});
     }
 
     @Override
     protected void ensureSuperClassRegistered() {
+#if($superClassImpl)
         Reflections.registerClass(new ${superClassImpl}());
+#end
     }
 
     @Override

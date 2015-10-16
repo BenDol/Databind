@@ -15,6 +15,9 @@
  */
 package nz.co.doltech.databind.core.dto;
 
-public class Employee extends Person {
+import java.util.List;
+
+public class Employee<T extends List> extends Person {
     private int listing;
+    private T generic;
 }
