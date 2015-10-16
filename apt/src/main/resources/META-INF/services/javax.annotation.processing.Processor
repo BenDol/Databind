@@ -1,1 +1,2 @@
 nz.co.doltech.databind.apt.reflect.ReflectionAnnotationProcessor
+nz.co.doltech.databind.apt.observable.ObservableAnnotationProcessor
