@@ -15,8 +15,18 @@
  */
 package nz.co.doltech.databind.reflect.gwt;
 
-public class A {
+public class A<E> {
     int b;
     @SuppressWarnings("unused")
     private int a;
+
+    private Double[] ar;
+
+    private E e;
+    private E[] er;
+    private E[][] erer;
+    private E[][][] ererer;
+
+    private String[] sr;
+    private B bee;
 }

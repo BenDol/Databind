@@ -23,10 +23,18 @@ import nz.co.doltech.databind.reflect.ReflectionRegistry;
 import nz.co.doltech.databind.reflect.Reflections;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.logging.LogRecord;
 
 @Reflected(classes = {
     A.class,
-    ArrayList.class
+    ArrayList.class,
+    HashMap.class,
+    Date.class,
+    LinkedList.class,
+    LogRecord.class
 })
 public class ReflectionGwtTest extends GWTTestCase {
     @Override

@@ -15,15 +15,19 @@
  */
 package nz.co.doltech.databind.core.gwt.collections;
 
+import nz.co.doltech.databind.core.gwt.SampleDTO1;
 import nz.co.doltech.databind.core.properties.Properties;
 import nz.co.doltech.databind.core.collections.WatchableCollection;
 import nz.co.doltech.databind.reflect.Reflected;
 
-@Reflected(classes = A.class)
+@Reflected(classes = {
+    A.class,
+    SampleDTO1.class
+})
 public class A {
-    int value;
+    protected int value;
 
-    WatchableCollection<A> children;
+    protected WatchableCollection<A> children;
 
     public A addChild() {
         if (children == null)

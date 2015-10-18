@@ -6,8 +6,7 @@ import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
-import com.github.javaparser.ast.expr.NameExpr;
-import nz.co.doltech.databind.apt.reflect.gwt.util.TypeUtil;
+import nz.co.doltech.databind.apt.reflect.util.TypeUtil;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

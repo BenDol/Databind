@@ -9,9 +9,9 @@ import com.github.javaparser.ast.body.TypeDeclaration;
 import nz.co.doltech.databind.apt.reflect.gwt.EmulTypeElement;
 import nz.co.doltech.databind.apt.reflect.gwt.EmulType;
 import nz.co.doltech.databind.apt.reflect.gwt.StringName;
-import nz.co.doltech.databind.apt.reflect.gwt.util.ModifierUtil;
-import nz.co.doltech.databind.apt.reflect.gwt.util.NameUtil;
-import nz.co.doltech.databind.apt.reflect.gwt.util.TypeUtil;
+import nz.co.doltech.databind.apt.reflect.util.ModifierUtil;
+import nz.co.doltech.databind.apt.reflect.util.NameUtil;
+import nz.co.doltech.databind.apt.reflect.util.TypeUtil;
 
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;

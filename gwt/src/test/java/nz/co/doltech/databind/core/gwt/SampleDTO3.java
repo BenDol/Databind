@@ -18,7 +18,7 @@ package nz.co.doltech.databind.core.gwt;
 import java.util.List;
 
 public class SampleDTO3<T> {
-    List<T> totos;
+    protected List<T> totos;
 
     public List<T> getTotos() {
         return totos;

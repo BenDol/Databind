@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 import nz.co.doltech.databind.apt.velocity.AbstractVelocityGenerator;
 import nz.co.doltech.databind.util.ModifierBuilder;
+import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.exception.VelocityException;
@@ -76,13 +77,18 @@ public class FieldGenerator extends AbstractVelocityGenerator<FieldGenerator.Fie
             targetName = targetName.substring(0, targetName.indexOf("<"));
         }
 
+        int arrayCount = StringUtils.countMatches(targetName, "[]");
+
         List<? extends TypeParameterElement> args = parent.getTypeParameters();
-        if(!args.isEmpty()) {
-            TypeParameterElement arg = args.get(0);
-            if(arg.toString().equals(targetName)) {
+        for(TypeParameterElement arg : args) {
+            if (arg.toString().equals(targetName.replace("[]", ""))) {
                 List<? extends TypeMirror> bounds = arg.getBounds();
-                if(!bounds.isEmpty()) {
+                if (!bounds.isEmpty()) {
                     targetName = bounds.get(0).toString();
+
+                    for(int i = 0; i < arrayCount; i++) {
+                        targetName += "[]";
+                    }
                 }
             }
         }

@@ -21,6 +21,7 @@ import nz.co.doltech.databind.apt.ElementUtils;
 import nz.co.doltech.databind.apt.ProcessorInfo;
 import nz.co.doltech.databind.apt.reflect.gwt.EmulElement;
 import nz.co.doltech.databind.apt.reflect.gwt.Emulation;
+import nz.co.doltech.databind.apt.reflect.gwt.javaparser.JdkJavaType;
 import nz.co.doltech.databind.reflect.IgnoreInfo;
 import nz.co.doltech.databind.reflect.Reflected;
 
@@ -205,14 +206,27 @@ public class ReflectionAnnotationProcessor extends AbstractProcessor {
             }
 
             if(!ElementUtils.hasAtleastOneModifier(field, Modifier.FINAL, Modifier.STATIC)) {
-                if(!ElementUtils.getVisibilityFromPackage(field).equals(Visibility.PACKAGE_PRIVATE)) {
-                    FieldGenerator generator = factory.createFieldGenerator(
-                        "nz/co/doltech/databind/apt/reflect/FieldReflection.vm");
-
-                    generator.mergeTemplate(writer, new FieldGenerator.FieldPair(field, element));
-
-                    fieldsAdded.add(field.getSimpleName().toString() + FieldGenerator.NAME);
+                // Check the fields type visibility
+                try {
+                    Element fieldType = getTypeUtils().asElement(field.asType());
+                    if (fieldType != null && !JdkJavaType.isPartOfJavaLang(fieldType.getSimpleName().toString())) {
+                        if (ElementUtils.getVisibility(fieldType).equals(Visibility.PRIVATE)) {
+                            // This class is not visible for
+                            // declarative reflection.
+                            continue;
+                        }
+                    }
+                } catch (IllegalArgumentException ex) {
+                    logger.warning("Attempted to get field '"
+                        + field.toString() + "'s type and threw: " + ex.getMessage());
                 }
+
+                FieldGenerator generator = factory.createFieldGenerator(
+                    "nz/co/doltech/databind/apt/reflect/FieldReflection.vm");
+
+                generator.mergeTemplate(writer, new FieldGenerator.FieldPair(field, element));
+
+                fieldsAdded.add(field.getSimpleName().toString() + FieldGenerator.NAME);
             }
         }
         return fieldsAdded;
@@ -270,8 +284,6 @@ public class ReflectionAnnotationProcessor extends AbstractProcessor {
         }
         return new ArrayList<>();
     }
-
-
 
     public static List<String> getIgnoredClasses() {
         return ignoredClasses;

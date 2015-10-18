@@ -18,28 +18,28 @@ package nz.co.doltech.databind.core.gwt;
 import java.util.List;
 
 public class SampleDTO2 {
-    String tata;
-    int toto;
-    boolean tutu;
-    long l;
-    float f;
-    byte b;
+    protected String tata;
+    protected  int toto;
+    protected boolean tutu;
+    protected long l;
+    protected float f;
+    protected byte b;
 
-    String[] tatas;
-    int[] totos;
-    boolean[] tutus;
-    long[] ls;
-    float fs[];
-    byte bs[];
+    protected String[] tatas;
+    protected int[] totos;
+    protected boolean[] tutus;
+    protected long[] ls;
+    protected float fs[];
+    protected byte bs[];
 
-    List<Object> os;
+    protected List<Object> os;
 
     // self reference
-    SampleDTO2 titi2;
+    protected SampleDTO2 titi2;
 
-    SampleDTO1 titi;
+    protected SampleDTO1 titi;
 
-    List<SampleDTO1> titis;
+    protected List<SampleDTO1> titis;
 
-    List<SampleDTO1> totos4;
+    protected List<SampleDTO1> totos4;
 }

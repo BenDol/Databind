@@ -9,7 +9,7 @@ import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
 import nz.co.doltech.databind.apt.reflect.gwt.EmulTypeElement;
-import nz.co.doltech.databind.apt.reflect.gwt.util.NameUtil;
+import nz.co.doltech.databind.apt.reflect.util.NameUtil;
 
 import javax.lang.model.element.Element;
 import java.util.List;

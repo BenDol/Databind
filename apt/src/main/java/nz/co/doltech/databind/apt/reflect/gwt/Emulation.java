@@ -3,12 +3,7 @@ package nz.co.doltech.databind.apt.reflect.gwt;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.PackageDeclaration;
-import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.body.TypeDeclaration;
 import nz.co.doltech.databind.apt.reflect.gwt.ast.NodeToElementCompiler;
-import nz.co.doltech.databind.apt.reflect.gwt.util.MethodUnits;
-import nz.co.doltech.databind.apt.reflect.gwt.util.PackageUnit;
 
 import javax.lang.model.element.QualifiedNameable;
 import java.io.IOException;

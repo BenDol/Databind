@@ -30,7 +30,8 @@ import nz.co.doltech.databind.reflect.ReflectionRegistry;
  * @author Ben Dol
  */
 @Reflected(classes = {
-    TextBox.class, DTO.class
+    TextBox.class,
+    DTO.class
 
 })
 public class HasValueDataBindingGwtTest extends GWTTestCase {

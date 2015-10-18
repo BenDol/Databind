@@ -1,4 +1,4 @@
-package nz.co.doltech.databind.apt.reflect.gwt.util;
+package nz.co.doltech.databind.apt.reflect.util;
 
 import com.github.javaparser.ast.body.ModifierSet;
 

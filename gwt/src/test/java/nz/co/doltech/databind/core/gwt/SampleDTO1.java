@@ -19,23 +19,23 @@ import java.util.HashMap;
 import java.util.List;
 
 public class SampleDTO1 {
-    String tata;
-    int toto;
-    boolean tutu;
-    long l;
-    float f;
-    byte b;
+    protected String tata;
+    protected int toto;
+    protected boolean tutu;
+    protected long l;
+    protected float f;
+    protected byte b;
 
-    String[] tatas;
-    int[] totos;
-    boolean[] tutus;
-    long[] ls;
-    float fs[];
-    byte bs[];
+    protected String[] tatas;
+    protected int[] totos;
+    protected boolean[] tutus;
+    protected long[] ls;
+    protected float fs[];
+    protected byte bs[];
 
-    List<Object> os;
+    protected List<Object> os;
 
-    HashMap<String, List<SampleDTO1>> map;
+    protected HashMap<String, List<SampleDTO1>> map;
 
-    SampleDTO1 titi;
+    protected SampleDTO1 titi;
 }
