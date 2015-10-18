@@ -15,13 +15,17 @@
  */
 package nz.co.doltech.databind.apt.reflect;
 
+import com.github.misberner.apcommons.util.Visibility;
 import nz.co.doltech.databind.apt.AbstractProcessor;
 import nz.co.doltech.databind.apt.ElementUtils;
 import nz.co.doltech.databind.apt.ProcessorInfo;
+import nz.co.doltech.databind.apt.reflect.gwt.EmulElement;
+import nz.co.doltech.databind.apt.reflect.gwt.Emulation;
 import nz.co.doltech.databind.reflect.IgnoreInfo;
 import nz.co.doltech.databind.reflect.Reflected;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,13 +35,16 @@ import java.util.logging.Logger;
 import javax.annotation.processing.SupportedAnnotationTypes;
 import javax.annotation.processing.SupportedSourceVersion;
 import javax.lang.model.SourceVersion;
+import javax.lang.model.element.Element;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.Name;
+import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.MirroredTypesException;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.ElementFilter;
+import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
 import javax.tools.JavaFileObject;
 
@@ -190,20 +197,22 @@ public class ReflectionAnnotationProcessor extends AbstractProcessor {
         TypeElement element = (TypeElement)getTypeUtils().asElement(type);
 
         List<String> fieldsAdded = new ArrayList<>();
-        for(VariableElement field : ElementFilter.fieldsIn(element.getEnclosedElements())) {
+        for(VariableElement field : fieldsIn(element)) {
             if(field.getAnnotation(IgnoreInfo.class) != null) {
                 // We can ignore this field since it has
                 // the IgnoreInfo annotation marker.
                 continue;
             }
 
-            if(!ElementUtils.hasAtleastOneModifier(field, Modifier.FINAL, Modifier.STATIC, Modifier.TRANSIENT)) {
-                FieldGenerator generator = factory.createFieldGenerator(
-                    "nz/co/doltech/databind/apt/reflect/FieldReflection.vm");
+            if(!ElementUtils.hasAtleastOneModifier(field, Modifier.FINAL, Modifier.STATIC)) {
+                if(!ElementUtils.getVisibilityFromPackage(field).equals(Visibility.PACKAGE_PRIVATE)) {
+                    FieldGenerator generator = factory.createFieldGenerator(
+                        "nz/co/doltech/databind/apt/reflect/FieldReflection.vm");
 
-                generator.mergeTemplate(writer, new FieldGenerator.FieldPair(field, element));
+                    generator.mergeTemplate(writer, new FieldGenerator.FieldPair(field, element));
 
-                fieldsAdded.add(field.getSimpleName().toString() + FieldGenerator.NAME);
+                    fieldsAdded.add(field.getSimpleName().toString() + FieldGenerator.NAME);
+                }
             }
         }
         return fieldsAdded;
@@ -214,6 +223,32 @@ public class ReflectionAnnotationProcessor extends AbstractProcessor {
             "nz/co/doltech/databind/apt/reflect/ReflectionEnd.vm");
 
         generator.mergeTemplate(writer, fieldsAdded);
+    }
+
+    public List<VariableElement> fieldsIn(Element element) {
+        Elements elementUtils = getElementUtils();
+        PackageElement pkg = elementUtils.getPackageOf(element);
+
+        if(Emulation.isEmulated(pkg)) {
+            PackageElement pkgElement = elementUtils.getPackageElement(
+                Emulation.EMUL_PREFIX + pkg.getQualifiedName());
+
+            if(pkgElement != null) {
+                String emulName = pkgElement.toString() + "." + element.getSimpleName();
+                InputStream is = Emulation.openEmulationStream(emulName.replace(".", "/") + ".java");
+
+                EmulElement emulElement = Emulation.createEmulatedElement(is, emulName);
+                if(emulElement != null) {
+                    return ElementFilter.fieldsIn(emulElement.getEnclosedElements());
+                } else {
+                    logger.warning("Failed to find emulated element for "
+                        + element);
+                }
+            } else {
+                logger.warning("Failed to find emulated package for " + pkg);
+            }
+        }
+        return ElementFilter.fieldsIn(element.getEnclosedElements());
     }
 
     private List<? extends TypeMirror> getReflectClasses(Reflected reflected) {
@@ -235,6 +270,8 @@ public class ReflectionAnnotationProcessor extends AbstractProcessor {
         }
         return new ArrayList<>();
     }
+
+
 
     public static List<String> getIgnoredClasses() {
         return ignoredClasses;

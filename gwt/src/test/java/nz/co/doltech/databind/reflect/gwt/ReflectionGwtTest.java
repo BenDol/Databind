@@ -22,7 +22,12 @@ import nz.co.doltech.databind.reflect.Reflected;
 import nz.co.doltech.databind.reflect.ReflectionRegistry;
 import nz.co.doltech.databind.reflect.Reflections;
 
-@Reflected(classes = A.class)
+import java.util.ArrayList;
+
+@Reflected(classes = {
+    A.class,
+    ArrayList.class
+})
 public class ReflectionGwtTest extends GWTTestCase {
     @Override
     public String getModuleName() {

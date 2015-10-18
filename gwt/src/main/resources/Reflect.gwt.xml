@@ -9,5 +9,7 @@
     <super-source path="nz/co/doltech/databind/reflect/gwt/emul"/>
 
     <source path="nz/co/doltech/databind/reflect"
-            excludes="nz/co/doltech/databind/reflect/gwt/rebind,nz/co/doltech/databind/reflect/gwt/emul"/>
+            excludes="nz/co/doltech/databind/reflect/gwt/rebind,
+                      nz/co/doltech/databind/reflect/gwt/emul,
+                      nz/co/doltech/databind/reflect/apt"/>
 </module>
