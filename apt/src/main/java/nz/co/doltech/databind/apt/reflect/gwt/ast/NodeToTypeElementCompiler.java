@@ -10,7 +10,6 @@ import nz.co.doltech.databind.apt.reflect.gwt.EmulTypeElement;
 import nz.co.doltech.databind.apt.reflect.gwt.EmulType;
 import nz.co.doltech.databind.apt.reflect.gwt.StringName;
 import nz.co.doltech.databind.apt.reflect.util.ModifierUtil;
-import nz.co.doltech.databind.apt.reflect.util.NameUtil;
 import nz.co.doltech.databind.apt.reflect.util.TypeUtil;
 
 import javax.lang.model.element.Element;
@@ -44,7 +43,6 @@ public class NodeToTypeElementCompiler extends UnitCompiler<TypeDeclaration, Emu
         TypeMirror type = new EmulType(new StringName(qualifiedName), TypeKind.DECLARED);
         Name name = new StringName(unitName);
 
-
         ElementKind kind = ElementKind.OTHER;
         List<Element> members = new ArrayList<>();
         Set<Modifier> modifierSet = ModifierUtil.asSet(unit.getModifiers());
@@ -67,13 +65,12 @@ public class NodeToTypeElementCompiler extends UnitCompiler<TypeDeclaration, Emu
         // Children
         NodeToElementCompiler compiler = new NodeToElementCompiler(getCompileUnit(), element);
         for(BodyDeclaration member : unit.getMembers()) {
-            Element childElem = compiler.compile(member, NameUtil.getNodeName(
-                getCompileUnit(), member));
+            Element childElem = compiler.compile(member);
             if(childElem != null) {
                 members.add(childElem);
             }
         }
 
-        return new UnitCache<>(element, unitName);
+        return new UnitCache<>(element);
     }
 }

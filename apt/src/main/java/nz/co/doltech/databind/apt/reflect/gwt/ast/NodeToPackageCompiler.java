@@ -29,7 +29,7 @@ public class NodeToPackageCompiler extends UnitCompiler<PackageDeclaration, Pack
 
         Name name = new StringName(unit.getName().toString());
         return new UnitCache<PackageElement>(
-            new EmulPackageElement(type, parent, name, name, NestingKind.TOP_LEVEL), name.toString()
+            new EmulPackageElement(type, parent, name, name, NestingKind.TOP_LEVEL)
         );
     }
 }

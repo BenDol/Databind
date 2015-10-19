@@ -55,7 +55,7 @@ public class NodeToExecutableElementCompiler extends UnitCompiler<BodyDeclaratio
         TypeMirror type = new EmulType(TypeKind.EXECUTABLE);
         Name name = new StringName(unitName);
 
-        ElementKind kind = ElementKind.METHOD;
+        ElementKind kind = ElementKind.CONSTRUCTOR;
         List<Element> members = new ArrayList<>();
         Set<Modifier> modifierSet = ModifierUtil.asSet(unit.getModifiers());
 
@@ -71,19 +71,22 @@ public class NodeToExecutableElementCompiler extends UnitCompiler<BodyDeclaratio
             FieldDeclaration fd = new FieldDeclaration(param.getModifiers(), param.getType(),
                 new VariableDeclarator(id));
 
-            element.addParameter(compiler.compile(fd, paramName));
+            // Ensure the field has a parent
+            fd.setParentNode(unit);
+
+            element.addParameter(compiler.compile(fd));
         }
 
         // Children
         NodeToElementCompiler compiler = new NodeToElementCompiler(getCompileUnit(), element);
         for(Node child : unit.getChildrenNodes()) {
-            Element childElem = compiler.compile(child, NameUtil.getNodeName(getCompileUnit(), child));
+            Element childElem = compiler.compile(child);
             if(childElem != null) {
                 members.add(childElem);
             }
         }
 
-        return new UnitCache<ExecutableElement>(element, unitName);
+        return new UnitCache<ExecutableElement>(element);
     }
 
     private UnitCache<ExecutableElement> asMethod(MethodDeclaration unit) {
@@ -113,7 +116,7 @@ public class NodeToExecutableElementCompiler extends UnitCompiler<BodyDeclaratio
             fd.setParentNode(unit);
 
             try {
-                element.addParameter(compiler.compile(fd, paramName));
+                element.addParameter(compiler.compile(fd));
             } catch (ClassCastException ex) {
                 ex.printStackTrace();
             }
@@ -122,12 +125,12 @@ public class NodeToExecutableElementCompiler extends UnitCompiler<BodyDeclaratio
         // Children
         NodeToElementCompiler compiler = new NodeToElementCompiler(getCompileUnit(), element);
         for(Node child : unit.getChildrenNodes()) {
-            Element childElem = compiler.compile(child, NameUtil.getNodeName(getCompileUnit(), child));
+            Element childElem = compiler.compile(child);
             if(childElem != null) {
                 members.add(childElem);
             }
         }
 
-        return new UnitCache<ExecutableElement>(element, unitName);
+        return new UnitCache<ExecutableElement>(element);
     }
 }

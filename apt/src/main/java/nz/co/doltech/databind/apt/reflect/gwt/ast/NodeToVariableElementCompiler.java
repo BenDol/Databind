@@ -52,12 +52,12 @@ public class NodeToVariableElementCompiler extends UnitCompiler<FieldDeclaration
         // Children
         NodeToElementCompiler compiler = new NodeToElementCompiler(getCompileUnit(), element);
         for(Node child : unit.getChildrenNodes()) {
-            Element childElem = compiler.compile(child, NameUtil.getNodeName(getCompileUnit(), child));
+            Element childElem = compiler.compile(child);
             if(childElem != null) {
                 members.add(childElem);
             }
         }
 
-        return new UnitCache<>(element, unitName);
+        return new UnitCache<>(element);
     }
 }

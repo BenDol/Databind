@@ -45,12 +45,12 @@ public class Emulation {
         return false;
     }
 
-    public static EmulElement createEmulatedElement(InputStream in, String name) {
+    public static EmulElement createEmulatedElement(InputStream in) {
         CompilationUnit cu;
         try {
             cu = JavaParser.parse(in);
             NodeToElementCompiler compiler = new NodeToElementCompiler(cu, null);
-            return (EmulElement) compiler.compile(cu, name);
+            return (EmulElement) compiler.compile(cu);
         } catch (ParseException ex) {
             ex.printStackTrace();
         } finally {

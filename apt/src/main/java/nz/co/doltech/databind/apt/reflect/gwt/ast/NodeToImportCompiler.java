@@ -29,8 +29,7 @@ public class NodeToImportCompiler extends UnitCompiler<ImportDeclaration, Packag
 
         Name name = new StringName(unit.getName().toString());
         return new UnitCache<PackageElement>(
-            new EmulImportElement(type, parent, name, name, NestingKind.TOP_LEVEL, unit.isStatic(), unit.isAsterisk()),
-            name.toString()
+            new EmulImportElement(type, parent, name, name, NestingKind.TOP_LEVEL, unit.isStatic(), unit.isAsterisk())
         );
     }
 }

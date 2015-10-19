@@ -210,7 +210,7 @@ public class TypeUtil {
         if (!nameExpr.getName().contains(".")) {
             return determineQualifiedName(compilationUnit, nameExpr);
         }
-        return "";
+        return nameExpr.getName();
     }
 
     public static String determineQualifiedName(final CompilationUnit compilationUnit,

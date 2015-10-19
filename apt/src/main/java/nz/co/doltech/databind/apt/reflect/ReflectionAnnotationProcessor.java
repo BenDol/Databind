@@ -59,7 +59,7 @@ public class ReflectionAnnotationProcessor extends AbstractProcessor {
     static {
         ignoredClasses.add("java.lang.Object");
         ignoredClasses.add("com.google.gwt.core.client.JavaScriptObject");
-    };
+    }
 
     private static boolean registryCreated;
 
@@ -239,7 +239,7 @@ public class ReflectionAnnotationProcessor extends AbstractProcessor {
         generator.mergeTemplate(writer, fieldsAdded);
     }
 
-    public List<VariableElement> fieldsIn(Element element) {
+    protected List<VariableElement> fieldsIn(Element element) {
         Elements elementUtils = getElementUtils();
         PackageElement pkg = elementUtils.getPackageOf(element);
 
@@ -251,7 +251,7 @@ public class ReflectionAnnotationProcessor extends AbstractProcessor {
                 String emulName = pkgElement.toString() + "." + element.getSimpleName();
                 InputStream is = Emulation.openEmulationStream(emulName.replace(".", "/") + ".java");
 
-                EmulElement emulElement = Emulation.createEmulatedElement(is, emulName);
+                EmulElement emulElement = Emulation.createEmulatedElement(is);
                 if(emulElement != null) {
                     return ElementFilter.fieldsIn(emulElement.getEnclosedElements());
                 } else {

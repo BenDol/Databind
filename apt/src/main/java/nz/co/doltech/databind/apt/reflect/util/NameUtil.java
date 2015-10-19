@@ -3,7 +3,6 @@ package nz.co.doltech.databind.apt.reflect.util;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.NamedNode;
-import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.BaseParameter;
 import com.github.javaparser.ast.body.FieldDeclaration;
@@ -11,9 +10,11 @@ import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.NameExpr;
 
+import javax.lang.model.element.Element;
+
 public class NameUtil {
 
-    public static String getNodeName(CompilationUnit compileUnit, Node node) {
+    public static String getNodeName(CompilationUnit compileUnit, Object node) {
         if(node instanceof TypeDeclaration) {
             String nodeName = ((NamedNode) node).getName();
             if (!nodeName.contains(".")) {
@@ -23,11 +24,11 @@ public class NameUtil {
         } else if(node instanceof NamedNode) {
             return ((NamedNode) node).getName();
         } else if(node instanceof ImportDeclaration) {
-            return ((ImportDeclaration) node).getName().getName();
+            return ((ImportDeclaration) node).getName().toString();
         } else if(node instanceof CompilationUnit) {
-            return ((CompilationUnit) node).getPackage().getName().getName();
+            return ((CompilationUnit) node).getPackage().getName().toString();
         } else if(node instanceof PackageDeclaration) {
-            return ((PackageDeclaration) node).getName().getName();
+            return ((PackageDeclaration) node).getName().toString();
         } else if(node instanceof BaseParameter) {
             return ((BaseParameter) node).getId().getName();
         } else if(node instanceof VariableDeclarator) {
@@ -40,6 +41,8 @@ public class NameUtil {
                 useComma = true;
             }
             return name;
+        } else if(node instanceof Element) {
+            return ((Element) node).getSimpleName().toString();
         }
         return null;
     }
