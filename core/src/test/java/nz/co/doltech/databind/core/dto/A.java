@@ -17,4 +17,12 @@ package nz.co.doltech.databind.core.dto;
 
 public class A {
     public String firstName;
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
 }

@@ -6,11 +6,11 @@
     <parent>
         <groupId>nz.co.doltech</groupId>
         <artifactId>databind</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>databind-core</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.1-SNAPSHOT</version>
     <packaging>jar</packaging>
     
     <name>core</name>
@@ -36,12 +36,13 @@
         </dependency>
         <dependency>
             <groupId>nz.co.doltech</groupId>
-            <artifactId>databind-classinfo</artifactId>
+            <artifactId>databind-reflect</artifactId>
         </dependency>
         <dependency>
             <groupId>nz.co.doltech</groupId>
             <artifactId>databind-util</artifactId>
         </dependency>
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

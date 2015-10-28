@@ -6,11 +6,11 @@
     <parent>
         <groupId>nz.co.doltech</groupId>
         <artifactId>databind</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.1-SNAPSHOT</version>
     </parent>
     
     <artifactId>databind-gwt</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.1-SNAPSHOT</version>
     <packaging>jar</packaging>
     
     <name>gwt</name>
@@ -29,6 +29,7 @@
                         <phase>test</phase>
                         <configuration>
                             <includes>**/*GwtTest.java</includes>
+                            <skipTests>true</skipTests>
                         </configuration>
                     </execution>
                 </executions>
@@ -54,7 +55,7 @@
 
         <dependency>
             <groupId>nz.co.doltech</groupId>
-            <artifactId>databind-classinfo</artifactId>
+            <artifactId>databind-reflect</artifactId>
         </dependency>
 
         <dependency>

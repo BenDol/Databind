@@ -15,10 +15,7 @@
  */
 package nz.co.doltech.databind.core.dto;
 
-import nz.co.doltech.databind.annotation.Observable;
-
-@Observable
-class Workplace {
+public class Workplace {
     String name;
     String color;
     Person owner;
@@ -29,6 +26,30 @@ class Workplace {
     public Workplace(String name, String color, Person owner) {
         this.name = name;
         this.color = color;
+        this.owner = owner;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public Person getOwner() {
+        return owner;
+    }
+
+    public void setOwner(Person owner) {
         this.owner = owner;
     }
 }

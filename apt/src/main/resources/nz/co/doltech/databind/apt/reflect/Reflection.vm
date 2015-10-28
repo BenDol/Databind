@@ -1,0 +1,36 @@
+package $package
+
+import java.util.List;
+import java.util.ArrayList;
+
+import nz.co.doltech.databind.reflect.Reflections;
+import nz.co.doltech.databind.reflect.FieldReflection;
+import nz.co.doltech.databind.reflect.base.ClassReflectionBase;
+import nz.co.doltech.databind.reflect.base.FieldReflectionBase;
+
+/**
+ * Generated Reflection for {@link ${targetName}}.
+ */
+public class ${implName} extends ClassReflectionBase<${targetName}> {
+
+    public ${implName}() {
+        super(${targetName}.class, "$targetName", ${superClass});
+    }
+
+    @Override
+    protected void ensureSuperClassRegistered() {
+#if($superClassImpl)
+        Reflections.registerClass(new ${superClassImpl}());
+#end
+    }
+
+    @Override
+    public ${targetName} newInstance() {
+#if(!$defaultCtor)
+        throw new java.lang.IllegalStateException("Targeted class does not have a zero argument constructor, cannot create instance");
+#elseif($abstract)
+        throw new java.lang.IllegalStateException("Targeted class is abstract, cannot create instance");
+#else
+        return new ${targetName}();
+#end
+    }

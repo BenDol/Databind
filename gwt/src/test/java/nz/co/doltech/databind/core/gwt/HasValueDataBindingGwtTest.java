@@ -15,12 +15,10 @@
  */
 package nz.co.doltech.databind.core.gwt;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.junit.client.GWTTestCase;
 import com.google.gwt.user.client.ui.TextBox;
-
-import nz.co.doltech.databind.classinfo.gwt.ClazzBundle;
-import nz.co.doltech.databind.classinfo.gwt.ReflectedClasses;
+import nz.co.doltech.databind.reflect.Reflected;
+import nz.co.doltech.databind.reflect.ReflectionRegistry;
 
 /**
  * In addition to the normal binding adapters, the GWT version provides
@@ -31,6 +29,11 @@ import nz.co.doltech.databind.classinfo.gwt.ReflectedClasses;
  * @author Arnaud Tournier
  * @author Ben Dol
  */
+@Reflected(classes = {
+    TextBox.class,
+    DTO.class
+
+})
 public class HasValueDataBindingGwtTest extends GWTTestCase {
     @Override
     public String getModuleName() {
@@ -39,9 +42,7 @@ public class HasValueDataBindingGwtTest extends GWTTestCase {
 
     @Override
     protected void gwtSetUp() throws Exception {
-        super.gwtSetUp();
-
-        GWT.<MyBundle>create(MyBundle.class).register();
+        ReflectionRegistry.register();
     }
 
     /**
@@ -92,10 +93,5 @@ public class HasValueDataBindingGwtTest extends GWTTestCase {
          */
         b1.setText("toto");
         assertEquals("titi", b2.getValue());
-    }
-
-    interface MyBundle extends ClazzBundle {
-        @ReflectedClasses(classes = {DTO.class})
-        void register();
     }
 }

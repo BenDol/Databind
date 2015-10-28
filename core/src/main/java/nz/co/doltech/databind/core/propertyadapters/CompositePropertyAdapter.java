@@ -113,15 +113,14 @@ public class CompositePropertyAdapter implements PropertyAdapter {
 
         // remove adapters
         for (int i = 0; i < adapters.length; i++) {
-            if (adapters[i] == null) {
-                continue;
+            if (adapters[i] != null) {
+                adapters[i].removePropertyChangedHandler(adapterHandlerRegistrations[i]);
             }
-            adapters[i].removePropertyChangedHandler(adapterHandlerRegistrations[i]);
         }
     }
 
-    // create adapaters from the root context object to the end of the path, if
-    // possible...
+    // create adapters from the root context object
+    // to the end of the path, if possible.
     private void tryCreateAdapters() {
         Object object = context;
 
@@ -137,8 +136,7 @@ public class CompositePropertyAdapter implements PropertyAdapter {
                 // try to find an adapter, otherwise create one or return null
                 // to create an adapter, we need a context and a path item
                 // context is the 'object' value (ie the value of the previous
-                // pathItem or the root context)
-                // path item is path[p]
+                // pathItem or the root context) path item is path[p]
                 if (pathItem.charAt(0) == '$') {
                     if (PlatformSpecificProvider.get().isBindingToken(pathItem)) {
                         adapters[p] = PlatformSpecificProvider.get().createPropertyAdapter(object);
@@ -151,8 +149,7 @@ public class CompositePropertyAdapter implements PropertyAdapter {
                 }
 
                 // we should subscribe to the value changes so that we can
-                // subscribe to
-                // new values when anything on the path changes
+                // subscribe to new values when anything on the path changes
                 adapterHandlerRegistrations[p] = adapters[p].registerPropertyChanged(onPropertyChanged, p);
             }
 

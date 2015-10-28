@@ -18,7 +18,6 @@ package nz.co.doltech.databind.core.gwt;
 import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.ListBox;
 
-import nz.co.doltech.databind.classinfo.gwt.ClazzBundle;
 import nz.co.doltech.databind.core.gwt.propertyadapters.ListBoxPropertyAdapter;
 import nz.co.doltech.databind.core.gwt.propertyadapters.ValuePropertyAdapter;
 import nz.co.doltech.databind.core.propertyadapters.CompositePropertyAdapter;

@@ -69,11 +69,11 @@ public class PropertiesTest extends TestCase {
         dto.setB("Hello");
 
         // Gets the property value with the Property getter
-        String b = getValue(dto, "b");
+        String b = getValue(dto, "_b");
         assertEquals("Hello", b);
 
         // Sets the property value with the Property setter
-        setValue(dto, "b", "By property");
+        setValue(dto, "_b", "By property");
 
         // Gets the property value with the normal getter
         b = dto.getB();

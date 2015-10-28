@@ -15,7 +15,7 @@
  */
 package nz.co.doltech.databind.core.properties;
 
-import nz.co.doltech.databind.classinfo.Clazz;
+import nz.co.doltech.databind.reflect.ClassReflection;
 
 /**
  * Utility class supporting the concept of Property.
@@ -27,14 +27,14 @@ import nz.co.doltech.databind.classinfo.Clazz;
  * @author Ben Dol
  */
 public class Properties {
-    private final static PropertyValues propertyValues = new PropertyValues();
+    private final static PropertyAccessImpl propertyAccess = new PropertyAccessImpl();
     private final static PropertyChanges propertyChanges = new PropertyChanges();
 
     /**
      * Returns the class of the property
      */
-    public static Class<?> getPropertyType(Clazz<?> clazz, String name) {
-        return propertyValues.getPropertyType(clazz, name);
+    public static Class<?> getPropertyClassType(ClassReflection<?> clazz, String name) {
+        return propertyAccess.getFieldClassType(clazz, name);
     }
 
     /**
@@ -44,7 +44,7 @@ public class Properties {
      * @param name   Property name
      */
     public static <T> T getValue(Object object, String name) {
-        return propertyValues.getValue(object, name);
+        return propertyAccess.getValue(object, name);
     }
 
     /**
@@ -55,7 +55,7 @@ public class Properties {
      * @param value        the new value of the property
      */
     public static boolean setValue(Object object, String propertyName, Object value) {
-        return propertyValues.setValue(object, propertyName, value);
+        return propertyAccess.setValue(object, propertyName, value);
     }
 
     /**
@@ -101,32 +101,18 @@ public class Properties {
     /**
      * Whether a getter or a field is available with that name.
      */
-    public static boolean canAccessField(Clazz<?> clazz, String name) {
-        return propertyValues.hasSomethingToGetField(clazz, name);
-    }
-
-    /**
-     * Return the property getter type.
-     */
-    public static Class<?> getGetterPropertyType(Clazz<?> clazz, String name) {
-        return propertyValues.getGetterPropertyType(clazz, name);
-    }
-
-    /**
-     * Whether there is a setter or a field to write this property
-     */
-    public static boolean canSetField(Clazz<?> clazz, String name) {
-        return propertyValues.hasSomethingToSetField(clazz, name);
+    public static boolean canAccessField(ClassReflection<?> clazz, String name) {
+        return propertyAccess.hasFieldAccess(clazz, name);
     }
 
     /**
      * Returns the class of the setter property. It can be the class of the first
      * argument in the setter or the class of the field if no setter is found.
      * If a virtual property is used, it returns null or the class of the current
-     * property's value
+     * property's value.
      */
-    public static Class<?> getSetterPropertyType(Clazz<?> clazz, String name) {
-        return propertyValues.getSetterPropertyType(clazz, name);
+    public static Class<?> getFieldClassType(ClassReflection<?> clazz, String name) {
+        return propertyAccess.getFieldClassType(clazz, name);
     }
 
     /**
@@ -136,20 +122,20 @@ public class Properties {
      * @param propertyName the property name
      */
     public static <T> T getObjectDynamicProperty(Object object, String propertyName) {
-        return propertyValues.getObjectDynamicProperty(object, propertyName);
+        return propertyAccess.getObjectDynamicProperty(object, propertyName);
     }
 
     /**
      * Whether a dynamic property value has already been set on this object
      */
     public static boolean hasObjectDynamicProperty(Object object, String propertyName) {
-        return propertyValues.hasObjectDynamicProperty(object, propertyName);
+        return propertyAccess.hasObjectDynamicProperty(object, propertyName);
     }
 
     /**
      * Sets a dynamic property value on an object.
      */
     public static void setObjectDynamicProperty(Object object, String propertyName, Object value) {
-        propertyValues.setObjectDynamicProperty(object, propertyName, value);
+        propertyAccess.setObjectDynamicProperty(object, propertyName, value);
     }
 }

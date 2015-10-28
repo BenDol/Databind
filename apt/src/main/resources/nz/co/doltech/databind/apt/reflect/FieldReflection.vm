@@ -1,0 +1,31 @@
+
+    // '${fieldName}' Field Reflection
+
+    static class ${implName} extends FieldReflectionBase {
+        public ${implName}() {
+            super(${targetName}.class, "$fieldName", ${modifier});
+        }
+
+        @Override
+        public void setValue(Object object, Object value) {
+            setNativeValue(object, (${targetName}) value);
+        }
+
+        @Override
+        public <T> T getValue(Object object) {
+            return (T) (${castClass}) getNativeValue(object);
+        }
+
+        @Override
+        public native final void copyValueTo(Object source, Object dest) /*-{
+            dest.@${parentClass}::${fieldName} = source.@${parentClass}::${fieldName};
+        }-*/;
+
+        private native final void setNativeValue(Object object, ${targetName} value) /*-{
+            object.@${parentClass}::${fieldName} = value;
+        }-*/;
+
+        private native final ${targetName} getNativeValue(Object object) /*-{
+            return object.@${parentClass}::${fieldName};
+        }-*/;
+    }

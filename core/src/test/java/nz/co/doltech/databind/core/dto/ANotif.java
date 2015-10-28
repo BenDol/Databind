@@ -17,17 +17,12 @@ package nz.co.doltech.databind.core.dto;
 
 import nz.co.doltech.databind.core.properties.Properties;
 
-public class ANotif {
-    private String firstName;
-
+public class ANotif extends A {
     private String lastName;
 
-    public String getFirstName() {
-        return firstName;
-    }
-
+    @Override
     public void setFirstName(String firstName) {
-        this.firstName = firstName;
+        super.setFirstName(firstName);
         Properties.notify(this, "firstName");
     }
 
