@@ -3,15 +3,6 @@
 Firstly this library has been forked from [Hexa Tools](https://github.com/ltearno/hexa.tools), the reason for this is that the original databinding library was too heavy and lacked some flexibility that I needed (Also made many bug fixes). So credits to @ltearno for majority of this projects orginial functionality.
 
 ## Getting Started
-First you will need to import the dependency:
-```xml
-<dependency>
-    <groupId>nz.co.doltech</groupId>
-    <artifactId>databind</artifactId>
-    <version>1.0-SNAPSHOT</version>
-</dependency>
-```
-
 Choose the platform you would like to get started with:
 * [Standard Java](https://github.com/BenDol/Databind/wiki/Binding Guide)
 * [Google Web Toolkit](https://github.com/BenDol/Databind/wiki/Google-Web-Toolkit)
