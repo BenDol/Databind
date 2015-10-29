@@ -32,7 +32,6 @@ import nz.co.doltech.databind.reflect.ReflectionRegistry;
 @Reflected(classes = {
     TextBox.class,
     DTO.class
-
 })
 public class HasValueDataBindingGwtTest extends GWTTestCase {
     @Override

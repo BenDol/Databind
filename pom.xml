@@ -6,7 +6,7 @@
 
     <groupId>nz.co.doltech</groupId>
     <artifactId>databind</artifactId>
-    <version>1.1-SNAPSHOT</version>
+    <version>1.0-SNAPSHOT</version>
 
     <packaging>pom</packaging>
 
@@ -45,6 +45,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.generated-sources>${project.build.directory}/generated-sources/apt</project.generated-sources>
         <project.generated-test-sources>${project.build.directory}/generated-test-sources/test-annotations</project.generated-test-sources>
 
         <mavenVersion>3.0</mavenVersion>
@@ -89,27 +90,27 @@
             <dependency>
                 <groupId>nz.co.doltech</groupId>
                 <artifactId>databind-core</artifactId>
-                <version>1.1-SNAPSHOT</version>
+                <version>1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>nz.co.doltech</groupId>
                 <artifactId>databind-reflect</artifactId>
-                <version>1.1-SNAPSHOT</version>
+                <version>1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>nz.co.doltech</groupId>
                 <artifactId>databind-apt</artifactId>
-                <version>1.1-SNAPSHOT</version>
+                <version>1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>nz.co.doltech</groupId>
                 <artifactId>databind-gwt</artifactId>
-                <version>1.1-SNAPSHOT</version>
+                <version>1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>nz.co.doltech</groupId>
                 <artifactId>databind-util</artifactId>
-                <version>1.1-SNAPSHOT</version>
+                <version>1.0-SNAPSHOT</version>
             </dependency>
 
             <!-- Javax -->
@@ -231,36 +232,6 @@
         </dependencies>
     </dependencyManagement>
     <build>
-        <plugins>
-            <!-- Run annotation processors on src/main/java sources -->
-            <plugin>
-                <groupId>org.bsc.maven</groupId>
-                <artifactId>maven-processor-plugin</artifactId>
-                <version>${maven-processor-plugin.version}</version>
-                <executions>
-                    <execution>
-                        <id>process</id>
-                        <phase>process-classes</phase>
-                        <goals>
-                            <goal>process</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${project.generated-sources}</outputDirectory>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>test</id>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>process-test</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${project.generated-test-sources}</outputDirectory>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
         <pluginManagement>
             <plugins>
                 <plugin>
