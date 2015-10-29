@@ -29,12 +29,7 @@ import java.util.LinkedList;
 import java.util.logging.LogRecord;
 
 @Reflected(classes = {
-    A.class,
-    ArrayList.class,
-    HashMap.class,
-    Date.class,
-    LinkedList.class,
-    LogRecord.class
+    A.class
 })
 public class ReflectionGwtTest extends GWTTestCase {
     @Override
