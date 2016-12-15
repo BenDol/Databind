@@ -70,6 +70,12 @@ public class EmulElement implements Element {
     }
 
     @Override
+    public <A extends Annotation> A[] getAnnotationsByType(Class<A> annotationType) {
+        // TODO:
+        return null;
+    }
+
+    @Override
     public Set<Modifier> getModifiers() {
         return modifiers;
     }

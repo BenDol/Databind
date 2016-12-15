@@ -78,6 +78,16 @@ public class EmulExecutableElement extends EmulTypeElement implements Executable
         return null;
     }
 
+    @Override
+    public TypeMirror getReceiverType() {
+        return null;
+    }
+
+    @Override
+    public boolean isDefault() {
+        return false;
+    }
+
     public void addParameter(VariableElement var) {
         if(var != null) {
             params.add(var);

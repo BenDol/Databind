@@ -50,7 +50,7 @@ import javax.lang.model.util.Types;
 import javax.tools.JavaFileObject;
 
 @SupportedAnnotationTypes({"nz.co.doltech.databind.reflect.Reflected"})
-@SupportedSourceVersion(SourceVersion.RELEASE_7)
+@SupportedSourceVersion(SourceVersion.RELEASE_8)
 public class ReflectionAnnotationProcessor extends AbstractProcessor {
 
     private static final Logger logger = Logger.getLogger(ReflectionAnnotationProcessor.class.getName());
@@ -108,7 +108,7 @@ public class ReflectionAnnotationProcessor extends AbstractProcessor {
         try {
             String pkgName = "nz.co.doltech.databind.reflect";
 
-            JavaFileObject jfo = getFiler().createSourceFile("reflect." + pkgName + ".ReflectionRegistry");
+            JavaFileObject jfo = getFiler().createSourceFile(pkgName + ".ReflectionRegistry");
             writer = jfo.openWriter();
 
             ReflectionRegistryGenerator generator = factory.createReflectionRegistryGenerator(
@@ -165,7 +165,7 @@ public class ReflectionAnnotationProcessor extends AbstractProcessor {
 
         Writer writer = null;
         try {
-            JavaFileObject jfo = getFiler().createSourceFile("reflect." + pkgName + "." + fileName);
+            JavaFileObject jfo = getFiler().createSourceFile(pkgName + "." + fileName);
             writer = jfo.openWriter();
 
             ReflectionGenerator generator = factory.createReflectionGenerator(

@@ -36,7 +36,7 @@ import javax.lang.model.util.ElementFilter;
 import javax.tools.Diagnostic.Kind;
 
 @SupportedAnnotationTypes({"nz.co.doltech.databind.util.Observable"})
-@SupportedSourceVersion(SourceVersion.RELEASE_7)
+@SupportedSourceVersion(SourceVersion.RELEASE_8)
 public class ObservableAnnotationProcessor extends BaseAnnotationProcessor {
 
     protected static final int BEGIN_INDEX = 0;

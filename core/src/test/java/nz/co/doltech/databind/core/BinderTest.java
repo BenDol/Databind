@@ -58,8 +58,8 @@ public class BinderTest extends TestCase {
     public void test003() {
         List<String> list = Arrays.asList("zero", "one", "two", "three", "four");
 
-        Properties.setValue(list, "selected", 3);
-        assertEquals(3, Properties.getValue(list, "selected"));
+        Properties.setValue(list, "selected", "3");
+        assertEquals("3", Properties.getValue(list, "selected"));
     }
 
     public void test004() {
