@@ -4,7 +4,7 @@ Firstly this library has been forked from [Hexa Tools](https://github.com/ltearn
 
 ## Getting Started
 Choose the platform you would like to get started with:
-* [Standard Java](https://github.com/BenDol/Databind/wiki/Binding Guide)
+* [Standard Java](https://github.com/BenDol/Databind/wiki/Binding-Guide)
 * [Google Web Toolkit](https://github.com/BenDol/Databind/wiki/Google-Web-Toolkit)
 
 ## Issues
